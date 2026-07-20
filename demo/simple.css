@@ -1,0 +1,106 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0d0d0f;
+  --fg: #ececec;
+  --faint: #8a8a8e;
+  --line: #26262a;
+  --card: #131316;
+}
+
+:root[data-theme='light'] {
+  --bg: #f4f2ec;
+  --fg: #1f1f1f;
+  --faint: #77756f;
+  --line: #dcd9d0;
+  --card: #edeae3;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: background 0.25s ease;
+}
+
+.mono {
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.faint {
+  color: var(--faint);
+}
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.theme-btn {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--fg);
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.theme-btn:hover {
+  background: var(--card);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 10px;
+  padding: 26px 0 34px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 24px;
+  border-radius: 10px;
+  background: var(--card);
+}
+
+.pair {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 108px;
+  flex: none;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  font-size: 16px;
+  text-transform: capitalize;
+}
+
+.sub {
+  font-size: 12.5px;
+  color: var(--faint);
+}

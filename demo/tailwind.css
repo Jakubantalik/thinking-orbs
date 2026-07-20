@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg: #070707;
+    --surface: rgba(217, 217, 217, 0.05);
+    --text: #fbfbfb;
+    --text-muted: rgba(251, 251, 251, 0.6);
+    --heading-fg: #ffffff;
+    --code-bg: #121212;
+    --panel-bg: #121212;
+    --pill-bg: #1d1d1d;
+    --pill-fg: #f8f8f8;
+    --pill-border: rgba(44, 47, 54, 0.52);
+    --pill-shadow: inset 0 0 50px 0 rgba(255, 255, 255, 0.02);
+    --icon-swap-dur: 300ms;
+    --icon-swap-blur: 4px;
+    --icon-swap-start-scale: 0.25;
+    --icon-swap-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    --icon-btn-bg: rgba(255, 255, 255, 0.07);
+    --icon-btn-hover: rgba(255, 255, 255, 0.1);
+    --icon-btn-fill: #fbfbfb;
+    --icon-btn-outline: rgba(255, 255, 255, 0.5);
+    --title-color: #fff;
+    --subtitle-color: #cacaca;
+    --section-title-color: #f0f0f0;
+    --section-title-muted: #cacaca;
+    --code-text: #fff;
+    --footer-muted: rgba(251, 251, 251, 0.4);
+    --footer-name: rgba(251, 251, 251, 0.7);
+    --footer-name-hover: rgba(251, 251, 251, 0.9);
+
+    --chip-bg: rgba(255, 255, 255, 0.04);
+    --chip-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02), inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+    --chip-color: #caccd2;
+    --chip-icon: #8E8E8E;
+
+    --tab-bg: rgba(255, 255, 255, 0.03);
+    --tab-color: rgba(251, 251, 251, 0.5);
+    --tab-hover-bg: rgba(255, 255, 255, 0.06);
+    --tab-hover-color: rgba(251, 251, 251, 0.7);
+    --tab-active-bg: rgba(255, 255, 255, 0.07);
+    --tab-active-color: #fbfbfb;
+    --tab-active-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.02), inset 0 0.5px 0 0 rgba(255, 255, 255, 0.06);
+
+    --strength-bg: rgba(255, 255, 255, 0.07);
+    --strength-hover: rgba(255, 255, 255, 0.09);
+    --strength-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.02), inset 0 0.5px 0 0 rgba(255, 255, 255, 0.06);
+    --strength-fill-bg: rgba(255, 255, 255, 0.1);
+
+    --toggle-bg: rgba(255, 255, 255, 0.07);
+    --toggle-hover: rgba(255, 255, 255, 0.1);
+    --toggle-color: rgba(251, 251, 251, 0.7);
+    --toggle-hover-color: #fbfbfb;
+
+    --mock-chat-bg: rgba(29, 29, 29, 0.7);
+    --mock-chat-shadow: inset 0 0 0 1px rgba(44, 47, 54, 0.52), inset 0 0 50px 0 rgba(255, 255, 255, 0.02);
+    --mock-chat-placeholder: #4e4e4e;
+
+    --copy-hover: rgba(255, 255, 255, 0.06);
+
+    --hero-search-light-bg: rgba(0, 0, 0, 0.04);
+    --hero-search-light-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04), inset 0 1px 0 0 rgba(0, 0, 0, 0.02);
+  }
+
+  html[data-theme="light"] {
+    --bg: white;
+    --surface: rgba(0, 0, 0, 0.04);
+    --text: #1a1a1a;
+    --text-muted: rgba(7, 7, 7, 0.6);
+    --heading-fg: #1a1a1a;
+    --code-bg: #ebebeb;
+    --panel-bg: #ebebeb;
+    --pill-bg: #ffffff;
+    --pill-fg: #121212;
+    --pill-border: transparent;
+    --pill-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 2px 6px 0 rgba(0, 0, 0, 0.05);
+
+    --icon-btn-bg: rgba(0, 0, 0, 0.06);
+    --icon-btn-hover: rgba(0, 0, 0, 0.1);
+    --icon-btn-fill: #1a1a1a;
+    --icon-btn-outline: rgba(0, 0, 0, 0.4);
+    --title-color: #1a1a1a;
+    --subtitle-color: rgba(7, 7, 7, 0.6);
+    --section-title-color: #1a1a1a;
+    --section-title-muted: rgba(7, 7, 7, 0.55);
+    --code-text: #1a1a1a;
+    --footer-muted: rgba(7, 7, 7, 0.45);
+    --footer-name: rgba(7, 7, 7, 0.65);
+    --footer-name-hover: rgba(7, 7, 7, 0.85);
+
+    --chip-bg: rgba(0, 0, 0, 0.04);
+    --chip-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06), inset 0 1px 0 0 rgba(0, 0, 0, 0.04);
+    --chip-color: #555;
+
+    --tab-bg: rgba(0, 0, 0, 0.04);
+    --tab-color: rgba(7, 7, 7, 0.55);
+    --tab-hover-bg: rgba(0, 0, 0, 0.07);
+    --tab-active-bg: rgba(0, 0, 0, 0.06);
+    --tab-active-color: #1a1a1a;
+
+    --strength-bg: rgba(0, 0, 0, 0.04);
+    --strength-hover: rgba(0, 0, 0, 0.06);
+    --strength-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.02), inset 0 0.5px 0 0 rgba(0, 0, 0, 0.06);
+    --strength-fill-bg: rgba(0, 0, 0, 0.07);
+
+    --toggle-bg: rgba(0, 0, 0, 0.06);
+    --toggle-hover: rgba(0, 0, 0, 0.1);
+    --toggle-color: rgba(7, 7, 7, 0.7);
+    --toggle-hover-color: #1a1a1a;
+
+    --mock-chat-bg: #ffffff;
+    --mock-chat-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.06);
+    --mock-chat-placeholder: #9a9a9a;
+
+    --copy-hover: rgba(0, 0, 0, 0.06);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    transition: background-color 0.2s, color 0.2s;
+  }
+}

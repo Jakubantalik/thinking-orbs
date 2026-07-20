@@ -1,13 +1,7 @@
-import { StrictMode } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import './tailwind.css';
 import './styles.css';
 
-const rootEl = document.getElementById('root');
-if (rootEl) {
-  createRoot(rootEl).render(
-    <StrictMode>
-      <App />
-    </StrictMode>
-  );
-}
+createRoot(document.getElementById('root')!).render(<App />);
