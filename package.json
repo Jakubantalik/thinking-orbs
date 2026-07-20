@@ -1,0 +1,68 @@
+{
+  "name": "thinking-orbs",
+  "version": "0.1.0",
+  "description": "Dotted thought-orb loading indicators for AI & agent UIs — six tuned states, two sizes, auto dark/light",
+  "type": "module",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.es.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "dev": "vite --config vite.config.demo.ts",
+    "build": "vite build",
+    "build:demo": "vite build --config vite.config.demo.ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.3.0",
+    "vite": "^5.0.0",
+    "vite-plugin-dts": "^3.7.0"
+  },
+  "keywords": [
+    "react",
+    "loading",
+    "loader",
+    "spinner",
+    "ai",
+    "agent",
+    "llm",
+    "canvas",
+    "animation",
+    "dark-mode"
+  ],
+  "author": "Jakub Antalik",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jakubantalik/thinking-orbs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Jakubantalik/thinking-orbs/issues"
+  },
+  "homepage": "https://github.com/Jakubantalik/thinking-orbs#readme"
+}
