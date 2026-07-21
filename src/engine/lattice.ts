@@ -170,7 +170,9 @@ export const drawRubik: ModeDraw = (ctx, size, t, dark, o) => {
 export const drawWave: ModeDraw = (ctx, size, t, dark, o) => {
   const cx = size / 2;
   const cy = size / 2;
-  const R = (size / 2) * 0.76;
+  // 0.76 base × 1.15 — the undulation pulls the sphere inward, so wave read
+  // ~15% smaller than the other lattice modes; scaled up to match them
+  const R = (size / 2) * 0.874;
   const pt = makeProj(t * 0.18, 0.38, cx, cy, 1);
   const rs = radiusScale(size, o.rsPow ?? 0.6);
 

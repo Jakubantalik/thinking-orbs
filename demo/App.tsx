@@ -14,12 +14,23 @@ export function App() {
   // preview AND the hero examples above. Stored as 25..300 percent to match
   // the slider range; consumers convert to a multiplier via `speed / 100`.
   const [speed, setSpeed] = useState(100);
+  // Dev-only: strip the gray hero surfaces to inspect the orbs in isolation.
+  const [debug, setDebug] = useState(false);
+  // Dev-only: render the small chips as large pills.
+  const [bigChips, setBigChips] = useState(false);
 
   return (
     <main className="flex flex-col items-center max-w-[883px] mx-auto w-full px-6 pb-16 max-sm:px-4 max-sm:pb-12">
-      <Header theme={theme} onToggleTheme={toggleTheme} />
+      <Header
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        debug={debug}
+        onToggleDebug={() => setDebug((d) => !d)}
+        bigChips={bigChips}
+        onToggleBigChips={() => setBigChips((b) => !b)}
+      />
 
-      <Examples speed={speed / 100} />
+      <Examples speed={speed / 100} debug={debug} bigChips={bigChips} />
 
       <section className="w-full mb-6" aria-label="Installation">
         <h2 className="text-base font-normal leading-[34px] text-(--section-title-color) mb-1">Installation</h2>

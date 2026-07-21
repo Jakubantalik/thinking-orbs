@@ -7,6 +7,10 @@ export function Footer() {
       <a className="text-(--footer-name) no-underline transition-colors duration-150 hover:text-(--footer-name-hover)" href="https://x.com/jakubantalik" target="_blank" rel="noopener noreferrer">
         Jakub Antalik
       </a>
+      <span className="text-(--footer-muted)"> &amp; </span>
+      <a className="text-(--footer-name) no-underline transition-colors duration-150 hover:text-(--footer-name-hover)" href="https://x.com/a_brinza" target="_blank" rel="noopener noreferrer">
+        Alex Brinza
+      </a>
     </footer>
   );
 }

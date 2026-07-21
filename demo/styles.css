@@ -36,6 +36,74 @@
   appearance: none;
 }
 
+/* Hero box fill — the --surface token at 30% lower opacity, scoped to the
+   hero demo boxes so the playground surface keeps the original value. */
+:root {
+  --hero-surface: rgba(217, 217, 217, 0.035);
+}
+html[data-theme="light"] {
+  --hero-surface: rgba(0, 0, 0, 0.028);
+}
+
+/* Pill fill + stroke — the --mock-chat-bg background and its inset ring at
+   40% lower opacity. Applied to the pill element only, so the orb + label
+   stay fully opaque. */
+:root {
+  --pill-fill: rgba(29, 29, 29, 0.42);
+  --pill-stroke: inset 0 0 0 1px rgba(44, 47, 54, 0.31), inset 0 0 50px 0 rgba(255, 255, 255, 0.012);
+}
+html[data-theme="light"] {
+  --pill-fill: rgba(255, 255, 255, 0.6);
+  --pill-stroke: 0 1px 2px rgba(0, 0, 0, 0.024), 0 0 0 1px rgba(0, 0, 0, 0.036);
+}
+
+/* Shimmer text (transitions.dev) — orb labels feel alive */
+:root {
+  --shimmer-dur: 2000ms;
+  --shimmer-band: 400%;
+  --shimmer-ease: linear;
+  --shimmer-base: rgba(251, 251, 251, 0.5);
+  --shimmer-highlight: #ffffff;
+}
+html[data-theme="light"] {
+  --shimmer-base: rgba(7, 7, 7, 0.45);
+  --shimmer-highlight: #0d0d0d;
+}
+
+.t-shimmer {
+  position: relative;
+  display: inline-block;
+  color: var(--shimmer-base);
+}
+.t-shimmer::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    90deg,
+    transparent          0%,
+    transparent         40%,
+    var(--shimmer-highlight) 50%,
+    transparent         60%,
+    transparent        100%
+  );
+  background-size: var(--shimmer-band) 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: t-shimmer var(--shimmer-dur) var(--shimmer-ease) infinite;
+}
+@keyframes t-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: 0% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-shimmer::before { animation: none !important; }
+}
+
 /* Range input thumb hacks */
 .strength-input::-webkit-slider-thumb {
   -webkit-appearance: none;
