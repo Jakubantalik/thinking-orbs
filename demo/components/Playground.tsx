@@ -68,7 +68,9 @@ export function Playground({
               ))}
             </div>
           </div>
+        </div>
 
+        <div className="flex items-end gap-6 max-sm:flex-col max-sm:items-stretch max-sm:gap-4">
           <div className="flex flex-col gap-[9px] min-w-0" role="radiogroup" aria-label="Orb size">
             <span className="text-xs font-normal leading-[14px] text-(--text-muted)">Size</span>
             <div className="flex gap-2 items-center">
@@ -86,7 +88,7 @@ export function Playground({
               <div className="absolute top-0 left-0 bottom-0 rounded-lg bg-(--strength-fill-bg) shadow-(--strength-shadow) transition-[width] duration-[80ms] ease-out pointer-events-none" style={{ width: `${fillPct}%` }} />
               <span className="absolute top-0 left-[11px] h-full flex items-center text-[11px] font-normal leading-[14px] text-(--text-muted) whitespace-nowrap pointer-events-none z-[1]">{(speed / 100).toFixed(2)}×</span>
               <input
-                className="strength-input appearance-none absolute inset-0 w-full h-full m-0 p-0 bg-transparent cursor-grab opacity-0 touch-none z-[2] active:cursor-grabbing"
+                className="strength-input appearance-none absolute inset-0 w-full h-full m-0 p-0 bg-transparent cursor-grab opacity-0 z-[2] active:cursor-grabbing"
                 type="range"
                 min={SPEED_MIN}
                 max={SPEED_MAX}

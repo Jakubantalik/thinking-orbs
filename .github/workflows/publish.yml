@@ -28,8 +28,8 @@ jobs:
       - run: npm run build
 
       # Publish; --access public is required for unscoped packages on a
-      # personal account. The NPM_TOKEN secret must be an "Automation" token
+      # personal account. The ORBS secret must be an npm "Automation" token
       # with publish rights to the thinking-orbs package.
       - run: npm publish --provenance --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.ORBS }}

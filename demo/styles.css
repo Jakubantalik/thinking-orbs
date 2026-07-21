@@ -104,18 +104,25 @@ html[data-theme="light"] {
   .t-shimmer::before { animation: none !important; }
 }
 
-/* Range input thumb hacks */
+/* Range input thumb hacks — a real-size TRANSPARENT thumb so the slider is
+   grabbable on touch (a 0-size thumb has no hit target on mobile), while the
+   custom fill/label below still render the value. */
 .strength-input::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 0;
-  height: 0;
+  width: 36px;
+  height: 36px;
   background: transparent;
   border: 0;
 }
 .strength-input::-moz-range-thumb {
-  width: 0;
-  height: 0;
+  width: 36px;
+  height: 36px;
   background: transparent;
   border: 0;
+}
+/* pan-y lets vertical page scroll pass through while the slider owns
+   horizontal drags — reliable range dragging on touch screens. */
+.strength-input {
+  touch-action: pan-y;
 }
