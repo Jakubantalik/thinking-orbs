@@ -18,6 +18,8 @@ export function App() {
   const [debug, setDebug] = useState(false);
   // Dev-only: render the small chips as large pills.
   const [bigChips, setBigChips] = useState(false);
+  // Dev-only: force every pill (hero + chips) to the small chip style.
+  const [smallAll, setSmallAll] = useState(false);
 
   return (
     <main className="flex flex-col items-center max-w-[883px] mx-auto w-full px-6 pb-16 max-sm:px-4 max-sm:pb-12">
@@ -28,9 +30,11 @@ export function App() {
         onToggleDebug={() => setDebug((d) => !d)}
         bigChips={bigChips}
         onToggleBigChips={() => setBigChips((b) => !b)}
+        smallAll={smallAll}
+        onToggleSmallAll={() => setSmallAll((s) => !s)}
       />
 
-      <Examples speed={speed / 100} debug={debug} bigChips={bigChips} />
+      <Examples speed={speed / 100} debug={debug} bigChips={bigChips} smallAll={smallAll} />
 
       <section className="w-full mb-6" aria-label="Installation">
         <h2 className="text-base font-normal leading-[34px] text-(--section-title-color) mb-1">Installation</h2>

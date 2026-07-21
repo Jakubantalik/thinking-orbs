@@ -11,6 +11,8 @@ export function Header({
   onToggleDebug,
   bigChips,
   onToggleBigChips,
+  smallAll,
+  onToggleSmallAll,
 }: {
   theme: Theme;
   onToggleTheme: () => void;
@@ -18,6 +20,8 @@ export function Header({
   onToggleDebug: () => void;
   bigChips: boolean;
   onToggleBigChips: () => void;
+  smallAll: boolean;
+  onToggleSmallAll: () => void;
 }) {
   return (
     <header className="relative w-full h-[218px] text-center flex flex-col items-center justify-end pb-[53px] max-sm:h-auto max-sm:min-h-[180px] max-sm:pt-[60px] max-sm:pb-8">
@@ -44,6 +48,17 @@ export function Header({
             title="Render the small chips as large pills (dev only)"
           >
             LG
+          </button>
+        )}
+        {import.meta.env.DEV && (
+          <button
+            type="button"
+            onClick={onToggleSmallAll}
+            aria-pressed={smallAll}
+            className={`${iconBtnClass} font-[Roboto_Mono,monospace] text-[11px] ${smallAll ? 'bg-(--icon-btn-hover) text-(--title-color)' : 'text-(--footer-muted)'}`}
+            title="Force every pill to the small chip style (dev only)"
+          >
+            SM
           </button>
         )}
         <a className={iconBtnClass} href="https://github.com/Jakubantalik/thinking-orbs" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">

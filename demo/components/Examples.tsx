@@ -23,6 +23,7 @@ export function Examples({
   speed = 1,
   debug = false,
   bigChips = false,
+  smallAll = false,
 }: {
   /** Forwarded to every <ThinkingOrb speed={...}/> so the Playground's
    *  speed slider drives these hero examples too. */
@@ -31,6 +32,8 @@ export function Examples({
   debug?: boolean;
   /** Dev-only: render the small chips as large pills. */
   bigChips?: boolean;
+  /** Dev-only: force every pill (hero + chips) to the small chip style. */
+  smallAll?: boolean;
 }) {
   const surface = debug ? 'bg-transparent' : 'bg-(--hero-surface)';
   return (
@@ -42,8 +45,12 @@ export function Examples({
             key={state}
             className={`relative w-full h-[314px] rounded-[30px] ${surface} flex items-center justify-center px-10 py-12 overflow-hidden max-sm:h-auto max-sm:min-h-[200px] max-sm:px-5 max-sm:py-8 max-sm:rounded-[20px]`}
           >
-            <div className={listeningPillClass}>
-              <ThinkingOrb state={state} size={64} speed={speed} style={{ width: 56, height: 56 }} />
+            <div className={smallAll ? chipClass : listeningPillClass}>
+              {smallAll ? (
+                <ThinkingOrb state={state} size={20} speed={speed} />
+              ) : (
+                <ThinkingOrb state={state} size={64} speed={speed} style={{ width: 56, height: 56 }} />
+              )}
               <span className="t-shimmer" data-text={label}>{label}</span>
             </div>
           </div>
@@ -54,7 +61,7 @@ export function Examples({
           small chips half-height) tile with no leftover gaps. */}
       <div className="columns-2 gap-3 max-sm:columns-1">
         {CHIP_STATES.map((state) => {
-          const large = bigChips || LARGE_CHIPS.has(state);
+          const large = !smallAll && (bigChips || LARGE_CHIPS.has(state));
           const label = large ? `${cap(state)}….` : `Agent ${state}…`;
           return (
           <div
