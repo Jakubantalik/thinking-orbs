@@ -50,16 +50,16 @@ export function Examples({
         ))}
       </div>
 
-      {/* 2×2 grid of agent chips — large pills in full-height boxes, small
-          chips in half-height boxes (items-start so they don't stretch) */}
-      <div className="grid grid-cols-2 gap-3 items-start max-sm:grid-cols-1">
+      {/* Masonry columns so the mixed-height boxes (large pills full-height,
+          small chips half-height) tile with no leftover gaps. */}
+      <div className="columns-2 gap-3 max-sm:columns-1">
         {CHIP_STATES.map((state) => {
           const large = bigChips || LARGE_CHIPS.has(state);
           const label = large ? `${cap(state)}….` : `Agent ${state}…`;
           return (
           <div
             key={state}
-            className={`relative w-full ${large ? 'h-[314px]' : 'h-[157px]'} rounded-[30px] ${surface} flex items-center justify-center px-8 py-8 overflow-hidden max-sm:h-auto max-sm:min-h-[200px] max-sm:rounded-[20px]`}
+            className={`relative w-full ${large ? 'h-[314px]' : 'h-[157px]'} mb-3 break-inside-avoid rounded-[30px] ${surface} flex items-center justify-center px-8 py-8 overflow-hidden max-sm:h-auto max-sm:min-h-[200px] max-sm:rounded-[20px]`}
           >
             <div className={large ? listeningPillClass : chipClass}>
               {large ? (
