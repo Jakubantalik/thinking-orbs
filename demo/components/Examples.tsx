@@ -57,16 +57,18 @@ export function Examples({
         ))}
       </div>
 
-      {/* Masonry columns so the mixed-height boxes (large pills full-height,
-          small chips half-height) tile with no leftover gaps. */}
-      <div className="columns-2 gap-3 max-sm:columns-1">
+      {/* Grid with row-spans (not CSS multi-column) so the mixed-height boxes
+          tile with no gaps AND render correctly in Safari, which mishandles
+          `break-inside: avoid` on fixed-height multicol items. Auto-rows of
+          151px → a 2-row span is 314px (large), a 1-row span is 151px. */}
+      <div className="grid grid-cols-2 gap-3 [grid-auto-rows:151px] max-sm:grid-cols-1 max-sm:auto-rows-auto">
         {CHIP_STATES.map((state) => {
           const large = !smallAll && (bigChips || LARGE_CHIPS.has(state));
           const label = large ? `${cap(state)}….` : `Agent ${state}…`;
           return (
           <div
             key={state}
-            className={`relative w-full ${large ? 'h-[314px]' : 'h-[157px]'} mb-3 break-inside-avoid rounded-[30px] ${surface} flex items-center justify-center px-8 py-8 overflow-hidden max-sm:h-auto max-sm:min-h-[200px] max-sm:rounded-[20px]`}
+            className={`relative w-full ${large ? 'row-span-2' : 'row-span-1'} rounded-[30px] ${surface} flex items-center justify-center px-8 py-8 overflow-hidden max-sm:row-auto max-sm:h-auto max-sm:min-h-[200px] max-sm:rounded-[20px]`}
           >
             <div className={large ? listeningPillClass : chipClass}>
               {large ? (
