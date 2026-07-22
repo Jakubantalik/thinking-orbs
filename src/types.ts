@@ -49,6 +49,13 @@ export interface ThinkingOrbProps extends Omit<CanvasHTMLAttributes<HTMLCanvasEl
   theme?: OrbTheme;
 
   /**
+   * CSS color used to tint the dots while preserving their depth shading.
+   * When set, this takes precedence over `theme`.
+   * @example '#8b5cf6'
+   */
+  color?: string;
+
+  /**
    * Animation speed multiplier on top of the preset's baked speed.
    * @default 1
    */

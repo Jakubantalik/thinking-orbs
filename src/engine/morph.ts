@@ -68,7 +68,7 @@ const HOLD = 1.4;
 const MORPH = 0.9;
 const SEG = HOLD + MORPH;
 
-export const drawMorph: ModeDraw = (ctx, size, t, dark, o) => {
+export const drawMorph: ModeDraw = (ctx, size, t, dark, o, color) => {
   const K = CYCLE.length;
   const tc = t % (SEG * K);
   const k = Math.floor(tc / SEG);
@@ -126,5 +126,5 @@ export const drawMorph: ModeDraw = (ctx, size, t, dark, o) => {
       white: 0.1
     });
   }
-  paint(ctx, dots, dark, o.rMin);
+  paint(ctx, dots, dark, o.rMin, color);
 };

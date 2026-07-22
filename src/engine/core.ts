@@ -54,10 +54,36 @@ export function makeProj(yaw: number, tilt: number, cx: number, cy: number, scal
 /**
  * Painter: z-sort far→near, matte grayscale dots. On dark substrates the
  * ink value is mirrored (1 - white) so near dots read bright — the same
- * depth language on an inverted substrate.
+ * depth language on an inverted substrate. When a tint is supplied, that
+ * same ink weight becomes opacity so the selected hue keeps its 3D depth.
  */
-export function paint(ctx: CanvasRenderingContext2D, dots: Dot[], dark: boolean, rMin = 0.3): void {
+export function paint(
+  ctx: CanvasRenderingContext2D,
+  dots: Dot[],
+  dark: boolean,
+  rMin = 0.3,
+  color?: string
+): void {
   dots.sort((a, b) => a.z - b.z);
+
+  if (color) {
+    ctx.save();
+    const baseAlpha = ctx.globalAlpha;
+    ctx.fillStyle = color;
+    for (const d of dots) {
+      const alpha = d.a ?? 1;
+      const w = Math.min(1, Math.max(0, d.white));
+      const tintAlpha = alpha * (1 - w);
+      if (tintAlpha < 0.02) continue;
+      ctx.globalAlpha = baseAlpha * tintAlpha;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, Math.max(rMin, d.r), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+    return;
+  }
+
   for (const d of dots) {
     const alpha = d.a ?? 1;
     if (alpha < 0.02) continue;

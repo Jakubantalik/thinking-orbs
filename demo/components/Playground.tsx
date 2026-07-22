@@ -7,12 +7,20 @@ import { PlayPauseToggle } from './PlayPauseToggle';
 
 const STATES: OrbState[] = ['working', 'searching', 'solving', 'listening', 'composing', 'shaping'];
 const SIZES: OrbSize[] = [64, 20];
+const COLORS: ReadonlyArray<{ label: string; value?: string }> = [
+  { label: 'Theme default' },
+  { label: 'Violet', value: '#8b5cf6' },
+  { label: 'Sky', value: '#0ea5e9' },
+  { label: 'Emerald', value: '#10b981' },
+  { label: 'Amber', value: '#f59e0b' },
+];
 
 const SPEED_MIN = 25;
 const SPEED_MAX = 300;
 
-function buildSnippet(state: OrbState, size: OrbSize, speed: number) {
+function buildSnippet(state: OrbState, size: OrbSize, speed: number, color?: string) {
   const props = [`state="${state}"`, `size={${size}}`];
+  if (color) props.push(`color="${color}"`);
   if (speed !== 100) props.push(`speed={${(speed / 100).toFixed(2)}}`);
   return `import { ThinkingOrb } from 'thinking-orbs';\n\n<ThinkingOrb ${props.join(' ')} />`;
 }
@@ -44,12 +52,13 @@ export function Playground({
 }) {
   const [state, setState] = useState<OrbState>('listening');
   const [size, setSize] = useState<OrbSize>(64);
+  const [color, setColor] = useState<string | undefined>();
   // Playground starts paused so the page loads quietly; the PlayPauseToggle
   // below only flips this local state, so the surrounding Examples keep
   // auto-playing regardless.
   const [paused, setPaused] = useState(true);
 
-  const snippet = buildSnippet(state, size, speed);
+  const snippet = buildSnippet(state, size, speed, color);
   const fillPct = ((speed - SPEED_MIN) / (SPEED_MAX - SPEED_MIN)) * 100;
 
   return (
@@ -99,11 +108,42 @@ export function Playground({
               />
             </div>
           </div>
+
+          <div className="flex flex-col gap-[9px] min-w-0" role="group" aria-label="Orb color">
+            <span className="text-xs font-normal leading-[14px] text-(--text-muted)">Color</span>
+            <div className="flex gap-2 items-center flex-wrap">
+              {COLORS.map((option) => {
+                const active = color === option.value;
+                return (
+                  <button
+                    key={option.label}
+                    type="button"
+                    aria-label={option.label}
+                    aria-pressed={active}
+                    title={option.label}
+                    onClick={() => setColor(option.value)}
+                    className="h-9 w-9 shrink-0 rounded-full border-2 cursor-pointer transition-transform duration-150 hover:scale-105 focus-visible:outline-2 focus-visible:outline-(--text-muted) focus-visible:outline-offset-2"
+                    style={{
+                      background: option.value ?? 'linear-gradient(135deg, #ffffff 50%, #111111 50%)',
+                      borderColor: active ? 'var(--text-muted)' : 'transparent',
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
 
       <div className="relative w-full min-h-[304px] rounded-[10px] bg-(--surface) flex flex-col items-center justify-center p-12 gap-6 max-sm:p-6">
-        <ThinkingOrb key={`${state}-${size}`} state={state} size={size} speed={speed / 100} paused={paused} />
+        <ThinkingOrb
+          key={`${state}-${size}-${color ?? 'default'}`}
+          state={state}
+          size={size}
+          color={color}
+          speed={speed / 100}
+          paused={paused}
+        />
         <PlayPauseToggle playing={!paused} onToggle={() => setPaused((p) => !p)} className="max-sm:absolute max-sm:bottom-6 max-sm:left-1/2 max-sm:-translate-x-1/2" />
       </div>
 

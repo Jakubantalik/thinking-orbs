@@ -23,6 +23,7 @@ export function ThinkingOrb({
   state = 'working',
   size = 64,
   theme = 'auto',
+  color,
   speed = 1,
   paused = false,
   style,
@@ -49,7 +50,7 @@ export function ThinkingOrb({
     const frame = (tSec: number) => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, size, size);
-      draw(ctx, size, tSec, dark, opts);
+      draw(ctx, size, tSec, dark, opts, color);
     };
 
     // reduced motion → one static, deterministic frame
@@ -100,7 +101,7 @@ export function ThinkingOrb({
       io?.disconnect();
       document.removeEventListener('visibilitychange', onVis);
     };
-  }, [state, size, dark, speed, paused, reduced]);
+  }, [state, size, dark, color, speed, paused, reduced]);
 
   return (
     <canvas

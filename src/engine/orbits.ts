@@ -5,7 +5,7 @@
 import type { Dot, ModeDraw } from './types';
 import { hashD, makeProj, paint, radiusScale } from './core';
 
-export const drawOrbits: ModeDraw = (ctx, size, t, dark, o) => {
+export const drawOrbits: ModeDraw = (ctx, size, t, dark, o, color) => {
   const cx = size / 2;
   const cy = size / 2;
   const R = (size / 2) * 0.82;
@@ -76,5 +76,5 @@ export const drawOrbits: ModeDraw = (ctx, size, t, dark, o) => {
       });
     }
   }
-  paint(ctx, dots, dark, o.rMin);
+  paint(ctx, dots, dark, o.rMin, color);
 };
