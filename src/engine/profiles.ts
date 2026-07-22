@@ -14,7 +14,7 @@ const COUNT_PAIRS: ReadonlyArray<readonly [string, string]> = [
   ['rings', 'lonDensity'],
   ['lanes', 'segs']
 ];
-const COUNT_KEYS = ['orbitN', 'ghostN'] as const;
+const COUNT_KEYS = ['orbitN', 'ghostN', 'starN'] as const;
 const ICON_DENSITY_KEYS = ['iconD'] as const;
 
 // Every key that sets a dot's rendered radius — scaling all of them keeps
@@ -114,6 +114,59 @@ export const BASE_PROFILES: Record<string, ModeOpts> = {
   morph: {
     rDot: 0.021,
     iconD: 1,
+    rMin: 0.25
+  },
+  cosmic: {
+    starN: 56,
+    shell: 0.88,
+    lobes: 2,
+    glowMul: 1,
+    starMul: 1,
+    rimMul: 1,
+    twinkle: 0.45,
+    spin: 0.22,
+    pulse: 0.08,
+    rsPow: 0.55,
+    rMin: 0.25
+  },
+  nebula: {
+    starN: 48,
+    shell: 0.88,
+    lobes: 3,
+    glowMul: 1.05,
+    starMul: 0.95,
+    rimMul: 0.9,
+    twinkle: 0.4,
+    spin: 0.16,
+    pulse: 0.1,
+    rsPow: 0.55,
+    rMin: 0.25
+  },
+  liquid: {
+    starN: 52,
+    shell: 0.86,
+    lobes: 2,
+    glowMul: 0.9,
+    starMul: 1,
+    rimMul: 1,
+    twinkle: 0.5,
+    spin: 0.18,
+    pulse: 0.06,
+    wobAmp: 0.09,
+    rsPow: 0.55,
+    rMin: 0.25
+  },
+  nova: {
+    starN: 60,
+    shell: 0.88,
+    lobes: 2,
+    glowMul: 1.15,
+    starMul: 1.05,
+    rimMul: 1.05,
+    twinkle: 0.55,
+    spin: 0.28,
+    pulse: 0.14,
+    rsPow: 0.55,
     rMin: 0.25
   }
 };

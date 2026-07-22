@@ -7,7 +7,17 @@ import type { ModeOpts } from './engine/profiles';
 import { BASE_PROFILES, scaleCounts, scaleRadii } from './engine/profiles';
 import type { OrbSize, OrbState } from './types';
 
-export type ModeKey = 'orbits' | 'globe' | 'rubik' | 'wave' | 'ribbon' | 'morph';
+export type ModeKey =
+  | 'orbits'
+  | 'globe'
+  | 'rubik'
+  | 'wave'
+  | 'ribbon'
+  | 'morph'
+  | 'cosmic'
+  | 'nebula'
+  | 'liquid'
+  | 'nova';
 
 export const STATE_TO_MODE: Record<OrbState, ModeKey> = {
   working: 'orbits',
@@ -15,7 +25,11 @@ export const STATE_TO_MODE: Record<OrbState, ModeKey> = {
   solving: 'rubik',
   listening: 'wave',
   composing: 'ribbon',
-  shaping: 'morph'
+  shaping: 'morph',
+  cosmic: 'cosmic',
+  nebula: 'nebula',
+  liquid: 'liquid',
+  nova: 'nova'
 };
 
 interface Preset {
@@ -50,6 +64,40 @@ const PRESETS: Record<ModeKey, Record<OrbSize, Preset>> = {
   morph: {
     64: { speed: 2.405, count: 0.54, size: 0.395, extra: { spread: 1.45 } },
     20: { speed: 2.08, count: 0.53, size: 1.011, extra: { spread: 1.45 } }
+  },
+  // Cosmic modes: count scales starN via COUNT_KEYS; size is unused for
+  // radii (gradients dominate), so keep size=1 and push star density /
+  // glow via extras per size.
+  cosmic: {
+    64: { speed: 1.4, count: 1, size: 1, extra: { lobes: 2, glowMul: 1, spin: 0.2 } },
+    20: { speed: 1.65, count: 0.45, size: 1, extra: { lobes: 2, glowMul: 0.95, spin: 0.25, shell: 0.9 } }
+  },
+  nebula: {
+    64: { speed: 1.15, count: 1, size: 1, extra: { lobes: 3, pulse: 0.1, glowMul: 1.05 } },
+    20: { speed: 1.35, count: 0.4, size: 1, extra: { lobes: 2, pulse: 0.08, glowMul: 1, shell: 0.9 } }
+  },
+  liquid: {
+    64: {
+      speed: 1.25,
+      count: 1,
+      size: 1,
+      extra: { lobes: 2, wobAmp: 0.09, twinkle: 0.5, spin: 0.18 }
+    },
+    20: {
+      speed: 1.5,
+      count: 0.42,
+      size: 1,
+      extra: { lobes: 2, wobAmp: 0.07, twinkle: 0.4, spin: 0.22, shell: 0.9 }
+    }
+  },
+  nova: {
+    64: { speed: 1.55, count: 1, size: 1, extra: { lobes: 2, pulse: 0.14, glowMul: 1.15, spin: 0.28 } },
+    20: {
+      speed: 1.8,
+      count: 0.42,
+      size: 1,
+      extra: { lobes: 2, pulse: 0.12, glowMul: 1.05, spin: 0.32, shell: 0.9 }
+    }
   }
 };
 

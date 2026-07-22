@@ -8,7 +8,11 @@ const STATES: Array<{ state: OrbState; blurb: string }> = [
   { state: 'solving', blurb: 'bands scramble, then click back' },
   { state: 'listening', blurb: 'a waveform rolls through the rings' },
   { state: 'composing', blurb: 'an undulating sash of bands' },
-  { state: 'shaping', blurb: 'circle → triangle → square' }
+  { state: 'shaping', blurb: 'circle → triangle → square' },
+  { state: 'cosmic', blurb: 'swirling galaxy core with star dust' },
+  { state: 'nebula', blurb: 'purple atmospheric glow with pulse' },
+  { state: 'liquid', blurb: 'fluid glass bubble with interior drift' },
+  { state: 'nova', blurb: 'amber flare with prismatic rim' }
 ];
 
 export function App() {
@@ -23,7 +27,7 @@ export function App() {
   return (
     <div className="page">
       <header>
-        <span className="mono">THINKING-ORBS · SIX STATES · TWO SIZES · AUTO THEME</span>
+        <span className="mono">THINKING-ORBS · TEN STATES · TWO SIZES · AUTO THEME</span>
         <button className="mono theme-btn" type="button" onClick={() => setDark((d) => !d)}>
           {dark ? 'LIGHT' : 'DARK'}
         </button>
