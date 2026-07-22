@@ -17,10 +17,16 @@
         "default": "./dist/index.cjs"
       }
     },
+    "./native": {
+      "types": "./src/native/index.ts",
+      "react-native": "./src/native/index.ts",
+      "default": "./src/native/index.ts"
+    },
     "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "sideEffects": false,
   "scripts": {
@@ -32,7 +38,20 @@
   },
   "peerDependencies": {
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react-dom": ">=18.0.0",
+    "react-native": ">=0.78.0",
+    "@shopify/react-native-skia": ">=2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-dom": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "@shopify/react-native-skia": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -58,7 +77,10 @@
     "llm",
     "canvas",
     "animation",
-    "dark-mode"
+    "dark-mode",
+    "react-native",
+    "expo",
+    "skia"
   ],
   "author": "Jakub Antalik",
   "license": "MIT",

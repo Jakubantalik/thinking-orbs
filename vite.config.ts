@@ -8,6 +8,10 @@ export default defineConfig({
     react(),
     dts({
       include: ['src'],
+      // src/native is the React Native entry (react-native + Skia peers);
+      // it ships as source via the "./native" export and is not part of
+      // the web bundle or its type rollup.
+      exclude: ['src/native/**'],
       rollupTypes: true
     })
   ],

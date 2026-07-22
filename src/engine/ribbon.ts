@@ -2,10 +2,11 @@
 // the "composing" state. The tuned preset freezes the 3D tumble
 // (spin 0), leaving the traveling undulation on a fixed band.
 
-import type { Dot, ModeDraw } from './types';
-import { fibDir, makeProj, paint, radiusScale } from './core';
+import type { Dot, ModeGeometry } from './types';
+import { fibDir, makeProj, radiusScale } from './core';
 
-export const drawRibbon: ModeDraw = (ctx, size, t, dark, o) => {
+export const drawRibbon: ModeGeometry = (size, t, o) => {
+  'worklet';
   const cx = size / 2;
   const cy = size / 2;
   const R = (size / 2) * 0.78;
@@ -67,5 +68,5 @@ export const drawRibbon: ModeDraw = (ctx, size, t, dark, o) => {
       });
     }
   }
-  paint(ctx, dots, dark, o.rMin);
+  return dots;
 };

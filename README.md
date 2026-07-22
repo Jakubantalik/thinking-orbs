@@ -20,6 +20,50 @@ function Status() {
 }
 ```
 
+## React Native (Expo)
+
+The same six tuned states run natively via a Skia renderer, imported from the
+`thinking-orbs/native` subpath. The pure engine geometry is shared with the web
+build — the orbs are pixel-faithful — and the entire animation runs on the UI
+thread (a Reanimated clock drives a Skia `Picture`), so there is **no per-frame
+React render and no JS-thread work**.
+
+```bash
+npx expo install @shopify/react-native-skia react-native-reanimated react-native-worklets
+```
+
+Add the worklets Babel plugin (must be last) in `babel.config.js`:
+
+```js
+module.exports = (api) => {
+  api.cache(true);
+  return { presets: ['babel-preset-expo'], plugins: ['react-native-worklets/plugin'] };
+};
+```
+
+The API is identical to the web component (`state` / `size` / `theme` / `speed`
+/ `paused`); only `style` differs (a React Native `ViewStyle`). As on web, `size`
+selects the tuned design (64 / 20); give `style` a width/height to scale the orb
+up — the Skia renderer fills it crisply (vectors), so an 80%-of-screen orb stays
+sharp.
+
+```tsx
+import { useWindowDimensions } from 'react-native';
+import { ThinkingOrb } from 'thinking-orbs/native';
+
+function Status() {
+  const { width } = useWindowDimensions();
+  const d = Math.round(width * 0.8);
+  return <ThinkingOrb state="working" size={64} style={{ width: d, height: d }} />;
+}
+```
+
+`react-native`, `@shopify/react-native-skia`, `react-native-reanimated` and
+`react-native-worklets` are optional peer dependencies — web consumers never
+pull them. A runnable Expo demo lives in [`example/`](./example). For a 120 Hz
+device, set `CADisableMinimumFrameDurationOnPhone: true` in `app.json`
+(`ios.infoPlist`).
+
 ## States
 
 Six verbs an agent can be doing, each a distinct animation:

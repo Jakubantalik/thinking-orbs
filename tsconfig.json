@@ -15,5 +15,6 @@
     "allowSyntheticDefaultImports": true
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "//": "src/native targets React Native (react-native + @shopify/react-native-skia peers) and is typechecked from the example app, not this web-oriented config.",
+  "exclude": ["node_modules", "dist", "src/native"]
 }
