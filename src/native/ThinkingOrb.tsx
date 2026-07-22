@@ -53,24 +53,28 @@ export function ThinkingOrb({
   // them each frame without being recreated when they change.
   const darkValue = useDerivedValue(() => dark, [dark]);
   const pausedValue = useDerivedValue(() => paused || reduced, [paused, reduced]);
+  const speedValue = useDerivedValue(() => effSpeed, [effSpeed]);
 
-  // Accumulated animation time (ms) — advances only while playing.
+  // Accumulated animation time (ms), advanced only while playing and scaled
+  // by the current speed AS it accrues. Changing `speed` therefore only
+  // affects the rate going forward — it never rescales past time, so the
+  // animation keeps flowing smoothly instead of jumping when speed changes.
   const animTime = useSharedValue(0);
   useFrameCallback((frame) => {
     'worklet';
     if (!pausedValue.get()) {
-      animTime.set(animTime.get() + (frame.timeSincePreviousFrame ?? 0));
+      animTime.set(animTime.get() + (frame.timeSincePreviousFrame ?? 0) * speedValue.get());
     }
   });
 
   const picture = useDerivedValue(() => {
     'worklet';
-    const t = reduced ? 0.6 * effSpeed : (animTime.get() / 1000) * effSpeed;
+    const t = reduced ? 0.6 : animTime.get() / 1000;
     const dots = geometry(size, t, opts);
     const canvas = recorder.beginRecording(Skia.XYWHRect(0, 0, box, box));
     paintDots(canvas, dots, darkValue.get(), paint, rMin, scale);
     return recorder.finishRecordingAsPicture();
-  }, [reduced, effSpeed, geometry, size, opts, box, scale, rMin]);
+  }, [reduced, geometry, size, opts, box, scale, rMin]);
 
   return (
     <Canvas style={[{ width: size, height: size }, style]}>

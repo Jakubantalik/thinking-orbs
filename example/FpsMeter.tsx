@@ -4,11 +4,11 @@
 // value is reported to React only ~5×/second (throttled runOnJS), so the
 // meter costs effectively nothing and never re-renders the animated orb.
 
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { runOnJS, useFrameCallback, useSharedValue } from 'react-native-reanimated';
 
-export function FpsMeter({ color }: { color: string }) {
+export const FpsMeter = memo(function FpsMeter({ color }: { color: string }) {
   const [fps, setFps] = useState(0);
   const smoothed = useSharedValue(0);
   const lastReport = useSharedValue(0);
@@ -28,7 +28,7 @@ export function FpsMeter({ color }: { color: string }) {
   });
 
   return <Text style={[styles.text, { color }]}>{`${fps} FPS`}</Text>;
-}
+});
 
 const styles = StyleSheet.create({
   text: {
