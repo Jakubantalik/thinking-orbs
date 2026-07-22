@@ -8,5 +8,5 @@
     "declarationMap": true
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "demo", "**/*.test.ts", "**/*.test.tsx"]
+  "exclude": ["node_modules", "dist", "demo", "src/native", "**/*.test.ts", "**/*.test.tsx"]
 }

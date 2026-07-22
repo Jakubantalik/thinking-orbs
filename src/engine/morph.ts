@@ -5,17 +5,37 @@
 // dots EVENLY along the blended outline — spacing stays uniform at
 // every instant of the morph, holds and transitions alike. Plain
 // circle fills only: no canvas/SVG filters, fully cross-browser.
+//
+// Shapes are expressed as plain vertex data + pure sampler functions
+// (rather than closures) so the whole path math is worklet-serialisable
+// and runs on the React Native UI thread. The `'worklet'` directives are
+// inert string literals in the web build.
 
-import type { Dot, ModeDraw } from './types';
-import { paint } from './core';
-
-type Path = (f: number) => [number, number];
+import type { Dot, ModeGeometry } from './types';
 
 function smoothE(x: number): number {
+  'worklet';
   return x * x * (3 - 2 * x);
 }
 
-function polyPath(verts: ReadonlyArray<readonly [number, number]>): Path {
+// Shape vertices (plain data). The triangle is 3 verts; the square is a
+// 5-vertex walk so its path STARTS at top-centre like the other shapes.
+const TRIANGLE: ReadonlyArray<readonly [number, number]> = [
+  [0.0, -0.26],
+  [0.24, 0.16],
+  [-0.24, 0.16]
+];
+const SQUARE: ReadonlyArray<readonly [number, number]> = [
+  [0, -0.2],
+  [0.2, -0.2],
+  [0.2, 0.2],
+  [-0.2, 0.2],
+  [-0.2, -0.2]
+];
+
+/** Sample a closed polygon's perimeter at arc-length fraction `f`. */
+function polySample(verts: ReadonlyArray<readonly [number, number]>, f: number): [number, number] {
+  'worklet';
   const V = verts.length;
   const L: number[] = [];
   let total = 0;
@@ -26,41 +46,34 @@ function polyPath(verts: ReadonlyArray<readonly [number, number]>): Path {
     L.push(l);
     total += l;
   }
-  return (f) => {
-    let target = f * total;
-    let i = 0;
-    while (target > L[i] && i < V - 1) {
-      target -= L[i];
-      i++;
-    }
-    const a = verts[i];
-    const b = verts[(i + 1) % V];
-    const ff = L[i] ? Math.min(1, target / L[i]) : 0;
-    return [a[0] + (b[0] - a[0]) * ff, a[1] + (b[1] - a[1]) * ff];
-  };
+  let target = f * total;
+  let i = 0;
+  while (target > L[i] && i < V - 1) {
+    target -= L[i];
+    i++;
+  }
+  const a = verts[i];
+  const b = verts[(i + 1) % V];
+  const ff = L[i] ? Math.min(1, target / L[i]) : 0;
+  return [a[0] + (b[0] - a[0]) * ff, a[1] + (b[1] - a[1]) * ff];
 }
 
-const CIRCLE: Path = (f) => {
-  const a = -Math.PI / 2 + f * 2 * Math.PI;
-  return [Math.cos(a) * 0.24, Math.sin(a) * 0.24];
-};
-const TRIANGLE = polyPath([
-  [0.0, -0.26],
-  [0.24, 0.16],
-  [-0.24, 0.16]
-]);
-// 5-vertex walk so the path STARTS at top-centre like the other shapes
-const SQUARE = polyPath([
-  [0, -0.2],
-  [0.2, -0.2],
-  [0.2, 0.2],
-  [-0.2, 0.2],
-  [-0.2, -0.2]
-]);
-const CYCLE: Path[] = [CIRCLE, TRIANGLE, SQUARE];
+// The 3-shape cycle: 0 = circle, 1 = triangle, 2 = square.
+const CYCLE_LEN = 3;
+
+/** Point on shape `k` at arc-length fraction `f`. */
+function shapePoint(k: number, f: number): [number, number] {
+  'worklet';
+  if (k === 0) {
+    const a = -Math.PI / 2 + f * 2 * Math.PI;
+    return [Math.cos(a) * 0.24, Math.sin(a) * 0.24];
+  }
+  return polySample(k === 1 ? TRIANGLE : SQUARE, f);
+}
 
 // low floor keeps sparse outlines possible while never degenerating
 function morphN(d: number): number {
+  'worklet';
   return Math.max(6, Math.round(34 * d));
 }
 
@@ -68,8 +81,9 @@ const HOLD = 1.4;
 const MORPH = 0.9;
 const SEG = HOLD + MORPH;
 
-export const drawMorph: ModeDraw = (ctx, size, t, dark, o) => {
-  const K = CYCLE.length;
+export const drawMorph: ModeGeometry = (size, t, o) => {
+  'worklet';
+  const K = CYCLE_LEN;
   const tc = t % (SEG * K);
   const k = Math.floor(tc / SEG);
   const local = tc - k * SEG;
@@ -77,14 +91,14 @@ export const drawMorph: ModeDraw = (ctx, size, t, dark, o) => {
   const sprd = o.spread ?? 1;
 
   // blend the two shape PATHS at m, then measure the blended outline
-  const pA = CYCLE[k];
-  const pB = CYCLE[(k + 1) % K];
+  const kA = k;
+  const kB = (k + 1) % K;
   const M = 160;
   const pts: Array<[number, number]> = [];
   for (let i = 0; i < M; i++) {
     const f = i / M;
-    const a = pA(f);
-    const b = pB(f);
+    const a = shapePoint(kA, f);
+    const b = shapePoint(kB, f);
     pts.push([(a[0] + (b[0] - a[0]) * m) * sprd, (a[1] + (b[1] - a[1]) * m) * sprd]);
   }
   const L: number[] = [];
@@ -126,5 +140,5 @@ export const drawMorph: ModeDraw = (ctx, size, t, dark, o) => {
       white: 0.1
     });
   }
-  paint(ctx, dots, dark, o.rMin);
+  return dots;
 };

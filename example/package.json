@@ -1,0 +1,29 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "dependencies": {
+    "@shopify/react-native-skia": "2.6.2",
+    "expo": "~57.0.7",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-native": "0.86.0",
+    "react-native-reanimated": "4.5.0",
+    "react-native-worklets": "0.10.0"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "typescript": "~6.0.3"
+  },
+  "scripts": {
+    "postinstall": "node -e \"const fs=require('fs');fs.rmSync('node_modules/thinking-orbs',{recursive:true,force:true});fs.symlinkSync('../..','node_modules/thinking-orbs','dir')\"",
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web"
+  },
+  "private": true,
+  "trustedDependencies": [
+    "@shopify/react-native-skia"
+  ]
+}

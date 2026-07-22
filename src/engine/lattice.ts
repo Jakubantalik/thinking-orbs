@@ -2,8 +2,8 @@
 // wave (listening). All draw a lat/long dot field with mode-specific
 // motion, then hand off to the shared z-sorted painter.
 
-import type { Dot, ModeDraw } from './types';
-import { angleDelta, hashD, makeProj, paint, radiusScale } from './core';
+import type { Dot, ModeGeometry } from './types';
+import { angleDelta, hashD, makeProj, radiusScale } from './core';
 
 // --- the shared solver heartbeat (rubik) ------------------------------
 // Rapid eased moves scramble, then replay in reverse (palindrome) so
@@ -17,6 +17,7 @@ interface Move {
 }
 
 function solveCycle(time: number, count: number, slotDur: number, rest: number) {
+  'worklet';
   const cyc = 2 * count * slotDur + rest;
   const tc = time % cyc;
   const amount = new Array<number>(count).fill(0);
@@ -45,6 +46,7 @@ function applyMoves(
   moves: Move[],
   sc: { amount: number[]; active: number }
 ): [number, number, number, boolean] {
+  'worklet';
   let [x, y, z] = pt3;
   let inActive = false;
   for (let i = 0; i < moves.length; i++) {
@@ -74,6 +76,7 @@ function applyMoves(
 }
 
 function makeMoves(count: number): Move[] {
+  'worklet';
   const moves: Move[] = [];
   for (let i = 0; i < count; i++) {
     const axis = Math.min(2, Math.floor(hashD(i, 2.3) * 3)) as 0 | 1 | 2;
@@ -86,7 +89,8 @@ function makeMoves(count: number): Move[] {
 
 // --- Globe: lat/long field, a scan meridian sweeps — searching --------
 
-export const drawGlobe: ModeDraw = (ctx, size, t, dark, o) => {
+export const drawGlobe: ModeGeometry = (size, t, o) => {
+  'worklet';
   const spin = 0.5;
   const cx = size / 2;
   const cy = size / 2;
@@ -124,12 +128,13 @@ export const drawGlobe: ModeDraw = (ctx, size, t, dark, o) => {
       });
     }
   }
-  paint(ctx, dots, dark, o.rMin);
+  return dots;
 };
 
 // --- Rubik: bands twist in quarter turns, scramble → solve — solving --
 
-export const drawRubik: ModeDraw = (ctx, size, t, dark, o) => {
+export const drawRubik: ModeGeometry = (size, t, o) => {
+  'worklet';
   const cx = size / 2;
   const cy = size / 2;
   const R = (size / 2) * 0.82;
@@ -162,12 +167,13 @@ export const drawRubik: ModeDraw = (ctx, size, t, dark, o) => {
       });
     }
   }
-  paint(ctx, dots, dark, o.rMin);
+  return dots;
 };
 
 // --- Wave: a waveform rolls through the rings — listening -------------
 
-export const drawWave: ModeDraw = (ctx, size, t, dark, o) => {
+export const drawWave: ModeGeometry = (size, t, o) => {
+  'worklet';
   const cx = size / 2;
   const cy = size / 2;
   // 0.76 base × 1.15 — the undulation pulls the sphere inward, so wave read
@@ -201,5 +207,5 @@ export const drawWave: ModeDraw = (ctx, size, t, dark, o) => {
       });
     }
   }
-  paint(ctx, dots, dark, o.rMin);
+  return dots;
 };
