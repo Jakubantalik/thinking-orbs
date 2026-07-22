@@ -5,5 +5,5 @@
 
 export { ThinkingOrb } from './ThinkingOrb';
 export { paintDots } from './renderer';
-export { useReducedMotion, useResolvedDark } from './theme';
+export { useResolvedDark } from './theme';
 export type { OrbSize, OrbState, OrbTheme, ThinkingOrbProps } from './types';

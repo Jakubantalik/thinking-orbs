@@ -1,20 +1,23 @@
 // The React Native ThinkingOrb. Same public API as the web component
 // (state / size / theme / speed / paused / style). Everything runs on the
-// UI thread: a Reanimated `useClock` drives a `useDerivedValue` worklet
-// that runs the engine geometry (the same pure math the web build uses —
-// it carries the `'worklet'` directive) and records the frame into a Skia
-// Picture. There is NO per-frame React render and NO JS-thread work — the
-// picture flows straight to <Picture> as a shared value. Pause and
-// reduced-motion simply stop the worklet from reading the clock.
+// UI thread and there are NO effects and NO per-frame React renders:
+//
+// - Live props (dark / paused / reduced) are mirrored into shared values
+//   with `useDerivedValue(() => prop, [prop])`, so the render worklet reacts
+//   to them WITHOUT being recreated — a theme toggle just recolors, it never
+//   restarts or hitches the motion.
+// - A `useFrameCallback` accumulates animation time only while playing, so
+//   pausing freezes and resuming never jumps.
+// - The picture `useDerivedValue` runs the engine geometry (shared, worklet)
+//   and records a Skia Picture, which flows straight to <Picture>.
 
-import { Canvas, Picture, Skia, useClock } from '@shopify/react-native-skia';
-import { useEffect } from 'react';
+import { Canvas, Picture, Skia } from '@shopify/react-native-skia';
 import { StyleSheet } from 'react-native';
-import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
+import { useDerivedValue, useFrameCallback, useReducedMotion, useSharedValue } from 'react-native-reanimated';
 import { MODE_GEOMETRY } from '../engine/registry';
 import { resolvePreset } from '../presets';
 import { paintDots } from './renderer';
-import { useReducedMotion, useResolvedDark } from './theme';
+import { useResolvedDark } from './theme';
 import type { ThinkingOrbProps } from './types';
 
 // One recorder + paint, reused for every frame of every orb. Frames are
@@ -41,34 +44,33 @@ export function ThinkingOrb({
   const rMin = opts.rMin ?? 0.3;
 
   // `size` picks the tuned design (64 / 20); a width in `style` scales that
-  // design up crisply to any on-screen size (Skia draws vectors). Defaults
-  // to the preset px, exactly like the web component.
+  // design up crisply to any on-screen size. Defaults to the preset px.
   const flat = StyleSheet.flatten(style);
   const box = typeof flat?.width === 'number' ? flat.width : size;
   const scale = box / size;
 
-  const clock = useClock();
-  // Total time spent paused, so unpausing never jumps the animation.
-  const pauseOffset = useSharedValue(0);
-  const pauseStart = useSharedValue(0);
+  // Live props → shared values, effect-free, so the render worklet can read
+  // them each frame without being recreated when they change.
+  const darkValue = useDerivedValue(() => dark, [dark]);
+  const pausedValue = useDerivedValue(() => paused || reduced, [paused, reduced]);
 
-  useEffect(() => {
-    if (paused) pauseStart.set(clock.get());
-    else pauseOffset.set(pauseOffset.get() + (clock.get() - pauseStart.get()));
-  }, [paused, clock, pauseOffset, pauseStart]);
+  // Accumulated animation time (ms) — advances only while playing.
+  const animTime = useSharedValue(0);
+  useFrameCallback((frame) => {
+    'worklet';
+    if (!pausedValue.get()) {
+      animTime.set(animTime.get() + (frame.timeSincePreviousFrame ?? 0));
+    }
+  });
 
   const picture = useDerivedValue(() => {
     'worklet';
-    // Reading the clock only while running makes the worklet re-run each
-    // frame; when paused/reduced it reads a frozen base and never depends
-    // on the clock — so it renders exactly one static frame.
-    const base = paused ? pauseStart.get() : clock.get();
-    const t = reduced ? 0.6 * effSpeed : ((base - pauseOffset.get()) / 1000) * effSpeed;
+    const t = reduced ? 0.6 * effSpeed : (animTime.get() / 1000) * effSpeed;
     const dots = geometry(size, t, opts);
     const canvas = recorder.beginRecording(Skia.XYWHRect(0, 0, box, box));
-    paintDots(canvas, dots, dark, paint, rMin, scale);
+    paintDots(canvas, dots, darkValue.get(), paint, rMin, scale);
     return recorder.finishRecordingAsPicture();
-  }, [paused, reduced, effSpeed, geometry, size, opts, dark, box, scale, rMin]);
+  }, [reduced, effSpeed, geometry, size, opts, box, scale, rMin]);
 
   return (
     <Canvas style={[{ width: size, height: size }, style]}>

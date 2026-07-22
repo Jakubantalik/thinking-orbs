@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { ThinkingOrb, type OrbState } from '../src/native';
+import { FpsMeter } from './FpsMeter';
 
 const STATES: OrbState[] = ['working', 'searching', 'solving', 'listening', 'composing', 'shaping'];
 
@@ -18,6 +19,10 @@ export default function App() {
   return (
     <View style={[styles.container, { backgroundColor: bg }]}>
       <StatusBar style={dark ? 'light' : 'dark'} />
+
+      <View style={styles.meter}>
+        <FpsMeter color={fg} />
+      </View>
 
       <View style={styles.orbWrap}>
         <ThinkingOrb
@@ -60,6 +65,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingBottom: 32 },
+  meter: { position: 'absolute', top: 64, right: 20 },
   orbWrap: { alignItems: 'center', justifyContent: 'center' },
   caption: { marginTop: 8, fontSize: 15, fontWeight: '600', letterSpacing: 1, textTransform: 'uppercase' },
   row: {
