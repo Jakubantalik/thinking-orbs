@@ -16,7 +16,11 @@ const LABELS: Record<string, string> = {
   solving: 'Solving…',
   listening: 'Listening…',
   composing: 'Composing…',
-  shaping: 'Shaping…'
+  shaping: 'Shaping…',
+  cosmic: 'Processing cosmic data…',
+  nebula: 'Synthesizing ideas…',
+  liquid: 'Adapting fluid context…',
+  nova: 'Generating response…'
 };
 
 export function ThinkingOrb({

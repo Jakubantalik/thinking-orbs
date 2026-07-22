@@ -3,6 +3,7 @@
 
 import type { ModeKey } from '../presets';
 import type { ModeDraw } from './types';
+import { drawCosmic, drawLiquid, drawNebula, drawNova } from './cosmic';
 import { drawGlobe, drawRubik, drawWave } from './lattice';
 import { drawMorph } from './morph';
 import { drawOrbits } from './orbits';
@@ -14,5 +15,9 @@ export const MODE_DRAWS: Record<ModeKey, ModeDraw> = {
   rubik: drawRubik,
   wave: drawWave,
   ribbon: drawRibbon,
-  morph: drawMorph
+  morph: drawMorph,
+  cosmic: drawCosmic,
+  nebula: drawNebula,
+  liquid: drawLiquid,
+  nova: drawNova
 };
