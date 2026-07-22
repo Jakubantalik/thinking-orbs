@@ -1,9 +1,15 @@
-// Learn more: https://docs.expo.dev/guides/monorepos/
-// This example consumes the library straight from ../src (no build step),
-// so metro watches the repo root and — critically — resolves react,
-// react-native and @shopify/react-native-skia to a SINGLE copy (the
-// example's), even for files bundled from ../src. Duplicate copies are
-// the classic cause of "invalid hook call" / native Skia crashes.
+// The example consumes the library by its package name (`thinking-orbs/native`),
+// which resolves through a symlink at node_modules/thinking-orbs -> the repo
+// root (created by the `postinstall` script in package.json). Consuming by
+// name via node_modules is the only thing the production / embed bundler
+// resolves — a `../src` relative import out of the project root works in the
+// dev server but fails a Release build.
+//
+// Metro must: (1) watch the repo root so the linked source is served,
+// (2) resolve the library's `./native` package export (source .ts), and
+// (3) resolve react / react-native / skia / reanimated / worklets to a SINGLE
+// copy (the example's), even inside the library — duplicate copies are the
+// classic "invalid hook call" / native Skia crash.
 
 const path = require('path');
 const { getDefaultConfig } = require('expo/metro-config');
@@ -13,6 +19,9 @@ const repoRoot = path.resolve(projectRoot, '..');
 const config = getDefaultConfig(projectRoot);
 
 config.watchFolders = [repoRoot];
+
+// Resolve the library's "./native" export (which points at TS source).
+config.resolver.unstable_enablePackageExports = true;
 
 const singletons = [
   'react',

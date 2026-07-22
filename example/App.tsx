@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
-import { ThinkingOrb, type OrbState } from '../src/native';
+import { ThinkingOrb, type OrbState } from 'thinking-orbs/native';
 import { FpsMeter } from './FpsMeter';
 
 const STATES: OrbState[] = ['working', 'searching', 'solving', 'listening', 'composing', 'shaping'];

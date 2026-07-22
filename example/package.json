@@ -16,6 +16,7 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
+    "postinstall": "node -e \"const fs=require('fs');fs.rmSync('node_modules/thinking-orbs',{recursive:true,force:true});fs.symlinkSync('../..','node_modules/thinking-orbs','dir')\"",
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
