@@ -10,5 +10,7 @@ export type ModeDraw = (
   size: number,
   t: number,
   dark: boolean,
-  opts: ModeOpts
+  opts: ModeOpts,
+  /** Optional CSS tint. Existing five-argument calls keep the monochrome palette. */
+  color?: string
 ) => void;

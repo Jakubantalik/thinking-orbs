@@ -1,6 +1,6 @@
 # thinking-orbs
 
-Dotted thought-orb loading indicators for AI & agent UIs. Six hand-tuned animated states, each shipped at two purpose-tuned sizes, rendered on a plain 2D canvas — no WebGL, no filters, works identically in Chrome, Safari and Firefox.
+Dotted thought-orb loading indicators for AI & agent UIs. Six hand-tuned animated states, each shipped at two purpose-tuned sizes, rendered on a plain 2D canvas — no WebGL, no filters, works identically in Chrome, Safari and Firefox. Use the automatic monochrome palette or supply any CSS color.
 
 [Live demo](https://orbs.jakubantalik.com) · [Repository](https://github.com/Jakubantalik/thinking-orbs) · [Report an issue](https://github.com/Jakubantalik/thinking-orbs/issues)
 
@@ -44,7 +44,7 @@ Two tuned presets — separate designs, not a scale factor. `64` for chat-avatar
 
 ## Theme
 
-Strictly monochrome — light ink for dark backgrounds, dark ink for light backgrounds — with the mode picked automatically from the host project:
+By default, the orb is monochrome — light ink for dark backgrounds, dark ink for light backgrounds — with the mode picked automatically from the host project:
 
 ```tsx
 <ThinkingOrb theme="auto" />   {/* default — detects from the project */}
@@ -58,12 +58,24 @@ Strictly monochrome — light ink for dark backgrounds, dark ink for light backg
 2. otherwise `prefers-color-scheme`, subscribed for live OS theme switches;
 3. SSR-safe — the canvas paints only on the client, after the theme has resolved.
 
+## Color
+
+Pass any CSS color to tint the dots. Depth remains visible through opacity, and colors with their own alpha channel keep it:
+
+```tsx
+<ThinkingOrb color="#8b5cf6" />
+<ThinkingOrb color="rgba(14, 165, 233, 0.8)" />
+```
+
+`color` takes precedence over `theme`. Omit it to keep the original automatic monochrome palette.
+
 ## Other props
 
 ```tsx
 <ThinkingOrb
   state="solving"
   size={20}
+  color="#8b5cf6"     // any CSS color; overrides theme
   speed={1.5}          // multiplier on the preset's baked speed
   paused={false}       // freeze on the current frame
   aria-label="Analysing repository…"  // overrides the per-state default
