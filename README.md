@@ -1,5 +1,7 @@
 # thinking-orbs
 
+[English](README.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
+
 Dotted thought-orb loading indicators for AI & agent UIs. Six hand-tuned animated states, each shipped at two purpose-tuned sizes, rendered on a plain 2D canvas — no WebGL, no filters, works identically in Chrome, Safari and Firefox.
 
 [Live demo](https://orbs.jakubantalik.com) · [Repository](https://github.com/Jakubantalik/thinking-orbs) · [Report an issue](https://github.com/Jakubantalik/thinking-orbs/issues)
