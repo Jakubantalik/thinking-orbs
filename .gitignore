@@ -6,3 +6,6 @@ dist-playground
 .DS_Store
 *.log
 .wrangler
+coverage
+playwright-report
+test-results

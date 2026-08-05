@@ -19,6 +19,8 @@ export type ModeKey =
   | 'morph';
 
 export const STATE_TO_MODE: Record<OrbState, ModeKey> = {
+  idle: 'ring',
+  thinking: 'rubik',
   working: 'orbits',
   searching: 'globe',
   solving: 'rubik',
@@ -27,7 +29,9 @@ export const STATE_TO_MODE: Record<OrbState, ModeKey> = {
   weaving: 'braid',
   composing: 'ribbon',
   breathing: 'ring',
-  shaping: 'morph'
+  shaping: 'morph',
+  success: 'web',
+  error: 'morph'
 };
 
 interface Preset {

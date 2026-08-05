@@ -74,8 +74,8 @@ export const drawWeb: ModeDraw = (ctx, size, t, dark, o) => {
   for (let s = 0; s < signals; s++) {
     const seg = Math.floor(t * 0.55 + s * 7.31);
     const a = Math.floor(hashD(seg, s * 3.1 + 1.7) * nodeN);
-    const b = Math.floor(hashD(seg, s * 5.7 + 4.2) * nodeN);
-    if (a === b) continue;
+    const candidate = Math.floor(hashD(seg, s * 5.7 + 4.2) * nodeN);
+    const b = candidate === a ? (candidate + 1) % nodeN : candidate;
     const f = frac(t * 0.55 + s * 7.31);
     const x = lerp(nodes[a][0], nodes[b][0], f);
     const y = lerp(nodes[a][1], nodes[b][1], f);

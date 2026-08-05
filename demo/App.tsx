@@ -4,6 +4,7 @@ import { Examples } from './components/Examples';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Playground } from './components/Playground';
+import { TransitionShowcase } from './components/TransitionShowcase';
 import { useTheme } from './hooks/useTheme';
 
 const USAGE_SNIPPET = `import { ThinkingOrb } from 'thinking-orbs';\n\n<ThinkingOrb state="listening" size={64} />`;
@@ -53,6 +54,8 @@ export function App() {
       </section>
 
       <Playground speed={speed} onSpeedChange={setSpeed} />
+
+      <TransitionShowcase />
 
       <Footer />
     </main>

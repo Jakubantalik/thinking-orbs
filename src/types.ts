@@ -13,6 +13,8 @@ import type { CSSProperties, CanvasHTMLAttributes } from 'react';
  * - `shaping`    — a dotted outline morphs circle → triangle → square
  */
 export type OrbState =
+  | 'idle'
+  | 'thinking'
   | 'working'
   | 'searching'
   | 'solving'
@@ -21,7 +23,12 @@ export type OrbState =
   | 'weaving'
   | 'composing'
   | 'breathing'
-  | 'shaping';
+  | 'shaping'
+  | 'success'
+  | 'error';
+
+/** A shipped state or an application-defined state profile name. */
+export type OrbStateName = OrbState | (string & {});
 
 /**
  * Rendered size in CSS pixels. Exactly two tuned presets ship:
@@ -52,7 +59,7 @@ export type OrbTheme = 'auto' | 'dark' | 'light';
 /** Props for the ThinkingOrb React component. */
 export interface ThinkingOrbProps extends Omit<CanvasHTMLAttributes<HTMLCanvasElement>, 'style'> {
   /** Which animation to show. @default 'working' */
-  state?: OrbState;
+  state?: OrbStateName;
 
   /** Tuned size preset — 64 or 20 CSS px. @default 64 */
   size?: OrbSize;
@@ -68,6 +75,35 @@ export interface ThinkingOrbProps extends Omit<CanvasHTMLAttributes<HTMLCanvasEl
 
   /** Freeze the animation on the current frame. @default false */
   paused?: boolean;
+
+  /** Default state transition. Pass `false` to retain instant switching. */
+  transition?: import('./controller/types').TransitionInput;
+
+  /** Default and state-pair transition configuration for this orb. */
+  transitions?: import('./controller/types').TransitionConfiguration;
+
+  /** Named transition definitions available to this orb. */
+  transitionPresets?: Record<string, import('./controller/types').TransitionDefinition>;
+
+  /** Temporary pointer/focus visual treatment layered over every state. */
+  interaction?: import('./controller/types').OrbInteractionConfig;
+
+  /** Additional reusable state profiles. */
+  stateProfiles?: Record<string, import('./controller/types').OrbStateProfile>;
+
+  /** Stable seed used when a transition needs additional particle slots. */
+  seed?: number;
+
+  /** Simulate or override reduced motion. Omit to follow the OS preference. */
+  reducedMotion?: boolean;
+
+  /** Receives the persistent imperative controller after mount. */
+  controllerRef?: import('react').Ref<import('./controller/OrbController').OrbController>;
+
+  onOrbTransitionStart?: (event: import('./controller/types').OrbTransitionEvent) => void;
+  onOrbTransitionProgress?: (event: import('./controller/types').OrbTransitionEvent) => void;
+  onOrbTransitionEnd?: (event: import('./controller/types').OrbTransitionEvent) => void;
+  onOrbTransitionCancel?: (event: import('./controller/types').OrbTransitionEvent) => void;
 
   style?: CSSProperties;
 }
