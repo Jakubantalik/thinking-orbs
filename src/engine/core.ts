@@ -12,6 +12,8 @@ export interface Dot {
   /** Ink value: 0 = darkest ink on paper. Mirrored on dark themes. */
   white: number;
   a?: number;
+  /** Optional exact RGB colour for custom profiles; built-ins stay monochrome. */
+  rgb?: readonly [number, number, number];
 }
 
 /** A stroked edge between two projected points (the `connecting` web). */
@@ -92,13 +94,19 @@ export function makeProj(yaw: number, tilt: number, cx: number, cy: number, scal
  * depth language on an inverted substrate.
  */
 export function paint(ctx: CanvasRenderingContext2D, dots: Dot[], dark: boolean, rMin = 0.3): void {
+  const capture = getFrameCapture(ctx);
+  if (capture) {
+    capture.dots.push(...dots.map((dot) => ({ ...dot })));
+    return;
+  }
   dots.sort((a, b) => a.z - b.z);
   for (const d of dots) {
     const alpha = d.a ?? 1;
     if (alpha < 0.02) continue;
     const w = Math.min(1, Math.max(0, d.white));
     const g = Math.round((dark ? 1 - w : w) * 255);
-    ctx.fillStyle = `rgba(${g},${g},${g},${alpha})`;
+    const [red, green, blue] = d.rgb ?? [g, g, g];
+    ctx.fillStyle = `rgba(${red},${green},${blue},${alpha})`;
     ctx.beginPath();
     ctx.arc(d.x, d.y, Math.max(rMin, d.r), 0, Math.PI * 2);
     ctx.fill();
@@ -107,6 +115,11 @@ export function paint(ctx: CanvasRenderingContext2D, dots: Dot[], dark: boolean,
 
 /** Stroke pass for edge-based modes. Runs before `paint` so nodes sit on top. */
 export function paintLines(ctx: CanvasRenderingContext2D, lines: Line[], dark: boolean): void {
+  const capture = getFrameCapture(ctx);
+  if (capture) {
+    capture.lines.push(...lines.map((line) => ({ ...line })));
+    return;
+  }
   for (const l of lines) {
     const alpha = l.a ?? 1;
     if (alpha < 0.02) continue;
@@ -119,6 +132,24 @@ export function paintLines(ctx: CanvasRenderingContext2D, lines: Line[], dark: b
     ctx.lineTo(l.x2, l.y2);
     ctx.stroke();
   }
+}
+
+interface FrameCapture {
+  dots: Dot[];
+  lines: Line[];
+}
+
+const CAPTURE = Symbol('thinking-orbs-frame-capture');
+
+function getFrameCapture(ctx: CanvasRenderingContext2D): FrameCapture | undefined {
+  return (ctx as CanvasRenderingContext2D & { [CAPTURE]?: FrameCapture })[CAPTURE];
+}
+
+/** Internal recording context used to sample existing painters without rasterising them. */
+export function createFrameCapture(): { ctx: CanvasRenderingContext2D; frame: FrameCapture } {
+  const frame: FrameCapture = { dots: [], lines: [] };
+  const ctx = { [CAPTURE]: frame } as unknown as CanvasRenderingContext2D;
+  return { ctx, frame };
 }
 
 /**

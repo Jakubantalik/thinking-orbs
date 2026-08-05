@@ -1,16 +1,12 @@
-// The ThinkingOrb component. One shared clock (performance.now) keeps
-// every mounted orb in phase; each instance runs its own rAF loop but
-// pauses automatically while offscreen (IntersectionObserver) or when
-// the tab is hidden (visibilitychange). Reduced-motion users get a
-// static representative frame that still follows the live theme.
-
 import { useEffect, useRef } from 'react';
-import { MODE_DRAWS } from './engine/registry';
-import { resolvePreset } from './presets';
+import { OrbController } from './controller/OrbController';
+import type { OrbControllerOptions } from './controller/types';
 import { useReducedMotion, useResolvedDark } from './theme';
 import type { ThinkingOrbProps } from './types';
 
 const LABELS: Record<string, string> = {
+  idle: 'Idle',
+  thinking: 'Thinking…',
   working: 'Working…',
   searching: 'Searching…',
   solving: 'Solving…',
@@ -19,7 +15,9 @@ const LABELS: Record<string, string> = {
   weaving: 'Weaving…',
   composing: 'Composing…',
   breathing: 'Thinking…',
-  shaping: 'Shaping…'
+  shaping: 'Shaping…',
+  success: 'Complete',
+  error: 'Error'
 };
 
 export function ThinkingOrb({
@@ -28,90 +26,107 @@ export function ThinkingOrb({
   theme = 'auto',
   speed = 1,
   paused = false,
+  transition,
+  transitions,
+  transitionPresets,
+  interaction,
+  stateProfiles,
+  seed,
+  reducedMotion,
+  controllerRef,
+  onOrbTransitionStart,
+  onOrbTransitionProgress,
+  onOrbTransitionEnd,
+  onOrbTransitionCancel,
   style,
   'aria-label': ariaLabel,
+  tabIndex,
   ...rest
 }: ThinkingOrbProps) {
-  const ref = useRef<HTMLCanvasElement | null>(null);
-  const dark = useResolvedDark(theme, ref);
-  const reduced = useReducedMotion();
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const controller = useRef<OrbController | null>(null);
+  const dark = useResolvedDark(theme, canvasRef);
+  const systemReduced = useReducedMotion();
+  const effectiveReduced = reducedMotion ?? systemReduced;
+  const initialOptions = useRef<OrbControllerOptions | null>(null);
+  if (!initialOptions.current) {
+    initialOptions.current = {
+      state,
+      size,
+      dark,
+      speed,
+      paused,
+      reducedMotion: effectiveReduced,
+      transition,
+      transitions,
+      transitionPresets,
+      interaction,
+      stateProfiles,
+      seed
+    };
+  }
 
   useEffect(() => {
-    const canvas = ref.current;
+    const canvas = canvasRef.current;
     if (!canvas) return;
-    const dpr = Math.min(2, (typeof devicePixelRatio !== 'undefined' && devicePixelRatio) || 1);
-    canvas.width = Math.round(size * dpr);
-    canvas.height = Math.round(size * dpr);
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const { mode, speed: baseSpeed, opts } = resolvePreset(state, size);
-    const draw = MODE_DRAWS[mode];
-    const effSpeed = baseSpeed * speed;
-
-    const frame = (tSec: number) => {
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, size, size);
-      draw(ctx, size, tSec, dark, opts);
-    };
-
-    // reduced motion → one static, deterministic frame
-    if (reduced) {
-      frame(0.6);
-      return;
-    }
-
-    let raf = 0;
-    let running = false;
-    const loop = () => {
-      frame((performance.now() / 1000) * effSpeed);
-      if (running) raf = requestAnimationFrame(loop);
-    };
-    const start = () => {
-      if (running || paused) return;
-      running = true;
-      raf = requestAnimationFrame(loop);
-    };
-    const stop = () => {
-      running = false;
-      cancelAnimationFrame(raf);
-    };
-
-    // draw at least one frame even when paused/offscreen
-    frame((performance.now() / 1000) * effSpeed);
-
-    // pause offscreen + on hidden tabs — free when not visible
-    let visible = true;
-    const io =
-      typeof IntersectionObserver !== 'undefined'
-        ? new IntersectionObserver(([entry]) => {
-            visible = entry.isIntersecting;
-            if (visible && document.visibilityState !== 'hidden') start();
-            else stop();
-          })
-        : null;
-    io?.observe(canvas);
-    const onVis = () => {
-      if (document.visibilityState === 'hidden') stop();
-      else if (visible) start();
-    };
-    document.addEventListener('visibilitychange', onVis);
-    if (!io) start();
-
+    const orb = new OrbController(canvas, initialOptions.current ?? {});
+    controller.current = orb;
     return () => {
-      stop();
-      io?.disconnect();
-      document.removeEventListener('visibilitychange', onVis);
+      controller.current = null;
+      orb.destroy();
     };
-  }, [state, size, dark, speed, paused, reduced]);
+  }, []);
 
+  useEffect(() => {
+    assignRef(controllerRef, controller.current);
+    return () => assignRef(controllerRef, null);
+  }, [controllerRef]);
+
+  useEffect(() => {
+    const orb = controller.current;
+    if (!orb || orb.state === state) return;
+    orb.setState(state, {
+      transition,
+      onStart: onOrbTransitionStart,
+      onProgress: onOrbTransitionProgress,
+      onEnd: onOrbTransitionEnd,
+      onCancel: onOrbTransitionCancel
+    });
+  }, [state, transition, onOrbTransitionStart, onOrbTransitionProgress, onOrbTransitionEnd, onOrbTransitionCancel]);
+
+  useEffect(() => controller.current?.setSize(size), [size]);
+  useEffect(
+    () => controller.current?.setAppearance({ dark, speed, paused, reducedMotion: effectiveReduced }),
+    [dark, speed, paused, effectiveReduced]
+  );
+  useEffect(() => {
+    controller.current?.setInteraction(interaction ?? {});
+  }, [interaction]);
+  useEffect(() => {
+    const orb = controller.current;
+    if (!orb) return;
+    for (const [name, definition] of Object.entries(transitionPresets ?? {})) orb.registerTransitionPreset(name, definition);
+  }, [transitionPresets]);
+  useEffect(() => {
+    const orb = controller.current;
+    if (!orb) return;
+    for (const [name, profile] of Object.entries(stateProfiles ?? {})) orb.registerStateProfile(name, profile);
+  }, [stateProfiles]);
+
+  const focusable = interaction?.focus?.enabled ? 0 : undefined;
   return (
     <canvas
-      ref={ref}
+      ref={canvasRef}
       role="img"
-      aria-label={ariaLabel ?? LABELS[state]}
-      style={{ width: size, height: size, display: 'block', ...style }}
+      aria-label={ariaLabel ?? LABELS[state] ?? state}
+      tabIndex={tabIndex ?? focusable}
+      style={{ width: size, height: size, display: 'block', pointerEvents: 'auto', ...style }}
       {...rest}
     />
   );
+}
+
+function assignRef<T>(ref: import('react').Ref<T> | undefined, value: T | null): void {
+  if (typeof ref === 'function') ref(value);
+  else if (ref) (ref as import('react').MutableRefObject<T | null>).current = value;
 }
