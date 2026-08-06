@@ -12,6 +12,7 @@ export type ModeKey =
   | 'globe'
   | 'rubik'
   | 'wave'
+  | 'twist'
   | 'web'
   | 'braid'
   | 'ribbon'
@@ -27,7 +28,8 @@ export const STATE_TO_MODE: Record<OrbState, ModeKey> = {
   weaving: 'braid',
   composing: 'ribbon',
   breathing: 'ring',
-  shaping: 'morph'
+  shaping: 'morph',
+  cleaning: 'twist'
 };
 
 interface Preset {
@@ -54,6 +56,14 @@ const PRESETS: Record<ModeKey, Record<OrbSize, Preset>> = {
   wave: {
     64: { speed: 4.388, count: 0.341, size: 1 },
     20: { speed: 3.998, count: 0.105, size: 1.6 }
+  },
+  // the stroke has to land near a second per swing to read as a machine, so
+  // speed is set against `rate` (0.149) rather than tuned by eye alone.
+  // `dwell` is a fraction of the cycle and the two sizes run different
+  // cycle lengths, so 20 carries its own to land the same 50ms dead stop
+  twist: {
+    64: { speed: 2.6, count: 0.45, size: 1.1 },
+    20: { speed: 3.05, count: 0.11, size: 1.85, extra: { amp: 1.05, drift: 0.05, dwell: 0.02272 } }
   },
   web: {
     64: { speed: 3.315, count: 1.35, size: 0.95 },

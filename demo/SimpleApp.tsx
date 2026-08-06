@@ -11,7 +11,8 @@ const STATES: Array<{ state: OrbState; blurb: string }> = [
   { state: 'weaving', blurb: 'three strands plait around the sphere' },
   { state: 'composing', blurb: 'an undulating sash of bands' },
   { state: 'breathing', blurb: 'a ring slowly morphing' },
-  { state: 'shaping', blurb: 'circle → triangle → square' }
+  { state: 'shaping', blurb: 'circle → triangle → square' },
+  { state: 'cleaning', blurb: 'a wring back and forth, crown first' }
 ];
 
 export function App() {

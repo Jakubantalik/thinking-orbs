@@ -19,7 +19,8 @@ const LABELS: Record<string, string> = {
   weaving: 'Weaving…',
   composing: 'Composing…',
   breathing: 'Thinking…',
-  shaping: 'Shaping…'
+  shaping: 'Shaping…',
+  cleaning: 'Cleaning…'
 };
 
 export function ThinkingOrb({
