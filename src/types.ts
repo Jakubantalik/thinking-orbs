@@ -1,5 +1,3 @@
-import type { CSSProperties, CanvasHTMLAttributes } from 'react';
-
 /**
  * The nine shipped states — each a hand-tuned animation:
  * - `working`    — particles on tilted orbits
@@ -48,26 +46,3 @@ export type OrbSize = 64 | 20;
  * backgrounds); light renders dark ink (for light backgrounds).
  */
 export type OrbTheme = 'auto' | 'dark' | 'light';
-
-/** Props for the ThinkingOrb React component. */
-export interface ThinkingOrbProps extends Omit<CanvasHTMLAttributes<HTMLCanvasElement>, 'style'> {
-  /** Which animation to show. @default 'working' */
-  state?: OrbState;
-
-  /** Tuned size preset — 64 or 20 CSS px. @default 64 */
-  size?: OrbSize;
-
-  /** Theme mode; `auto` detects from the host project. @default 'auto' */
-  theme?: OrbTheme;
-
-  /**
-   * Animation speed multiplier on top of the preset's baked speed.
-   * @default 1
-   */
-  speed?: number;
-
-  /** Freeze the animation on the current frame. @default false */
-  paused?: boolean;
-
-  style?: CSSProperties;
-}

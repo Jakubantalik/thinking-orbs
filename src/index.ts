@@ -1,6 +1,6 @@
-export { ThinkingOrb } from './ThinkingOrb';
+export { ThinkingOrb, type ThinkingOrbProps } from './ThinkingOrb';
 
-export type { ThinkingOrbProps, OrbState, OrbSize, OrbTheme } from './types';
+export type { OrbState, OrbSize, OrbTheme } from './types';
 
 // Power-user surface: the resolved presets + raw frame painters, for
 // consumers driving their own canvas outside React.
