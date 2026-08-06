@@ -75,6 +75,31 @@ Strictly monochrome — light ink for dark backgrounds, dark ink for light backg
 
 All other `<canvas>` props (`className`, `style`, `data-*`, …) pass through.
 
+## React Native
+
+The same nine states render on iOS and Android through [`@shopify/react-native-skia`](https://shopify.github.io/react-native-skia/) — the identical engine and tuning tables, drawn through a Skia adapter instead of a DOM canvas:
+
+```bash
+npm install thinking-orbs @shopify/react-native-skia
+```
+
+```tsx
+import { ThinkingOrb } from 'thinking-orbs/native';
+
+function Status() {
+  return <ThinkingOrb state="searching" size={64} />;
+}
+```
+
+Differences from the web component:
+
+- `style` takes a React Native view style; `accessibilityLabel` replaces `aria-label` (other view props pass through to the underlying Skia `Canvas`).
+- `theme="auto"` follows the OS via `useColorScheme()` — there's no DOM tree to inspect.
+- Reduced motion is honored via `AccessibilityInfo`, rendering the same static frame as on web.
+- The animation pauses while the app is backgrounded (`AppState`). React Native has no `IntersectionObserver`, so orbs scrolled offscreen keep animating — pass `paused` to stop them.
+
+On **react-native-web** (and any web bundler), `thinking-orbs/native` automatically resolves to the plain DOM canvas renderer — no Skia, no WASM in your web bundle, pixels identical to `thinking-orbs`. A runnable Expo app showing every state lives in [`example/`](example).
+
 ## Accessibility & performance
 
 - `role="img"` with a sensible per-state `aria-label` out of the box.

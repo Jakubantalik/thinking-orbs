@@ -25,6 +25,8 @@ jobs:
 
       - run: npm ci
 
+      - run: npm run typecheck && npm run typecheck:native
+
       - run: npm run build
 
       # Publish; --access public is required for unscoped packages on a
