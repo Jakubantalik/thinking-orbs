@@ -83,6 +83,8 @@ The same nine states render on iOS and Android through [`@shopify/react-native-s
 npm install thinking-orbs @shopify/react-native-skia
 ```
 
+> Skia v2 additionally needs its own runtime dependencies, `react-native-reanimated` and `react-native-worklets` — its `Canvas` throws at startup without them. Skia v1.x needs neither.
+
 ```tsx
 import { ThinkingOrb } from 'thinking-orbs/native';
 
