@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "Thinking Orbs",
+    "slug": "thinking-orbs-example",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "com.example.thinkingorbs"
+    },
+    "android": {
+      "package": "com.example.thinkingorbs"
+    }
+  }
+}

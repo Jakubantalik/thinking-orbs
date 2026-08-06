@@ -17,24 +17,48 @@
         "default": "./dist/index.cjs"
       }
     },
+    "./native": {
+      "types": "./dist/native/index.d.ts",
+      "browser": "./dist/native/index.js",
+      "react-native": "./dist/native/index.native.js",
+      "default": "./dist/native/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "native.js",
+    "native.native.js",
+    "native.d.ts"
   ],
   "sideEffects": false,
   "scripts": {
     "dev": "vite --config vite.config.demo.ts",
-    "build": "vite build",
+    "build": "vite build && vite build --config vite.config.native.ts",
     "build:demo": "vite build --config vite.config.demo.ts",
     "typecheck": "tsc --noEmit",
+    "typecheck:native": "tsc -p tsconfig.native.json --noEmit",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react-dom": ">=18.0.0",
+    "react-native": ">=0.73.0",
+    "@shopify/react-native-skia": ">=1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-dom": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "@shopify/react-native-skia": {
+      "optional": true
+    }
   },
   "devDependencies": {
+    "@shopify/react-native-skia": "^1.12.4",
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
@@ -42,6 +66,7 @@
     "clsx": "^2.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-native": "^0.75.5",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.3.0",

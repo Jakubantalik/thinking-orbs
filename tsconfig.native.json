@@ -1,0 +1,12 @@
+{
+  // The no-DOM gate: proves the engine, presets and the Skia entry
+  // compile without the DOM lib. The web fallback (src/native/ThinkingOrb.tsx)
+  // wraps the DOM component and is checked by the regular `typecheck`.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2020"],
+    "types": []
+  },
+  "include": ["src/engine", "src/native", "src/presets.ts", "src/types.ts", "src/labels.ts"],
+  "exclude": ["src/native/ThinkingOrb.tsx", "src/native/index.d.ts"]
+}

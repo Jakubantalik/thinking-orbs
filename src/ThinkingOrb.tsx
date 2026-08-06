@@ -4,23 +4,36 @@
 // the tab is hidden (visibilitychange). Reduced-motion users get a
 // static representative frame that still follows the live theme.
 
+import type { CSSProperties, CanvasHTMLAttributes } from 'react';
 import { useEffect, useRef } from 'react';
 import { MODE_DRAWS } from './engine/registry';
+import { LABELS } from './labels';
 import { resolvePreset } from './presets';
 import { useReducedMotion, useResolvedDark } from './theme';
-import type { ThinkingOrbProps } from './types';
+import type { OrbSize, OrbState, OrbTheme } from './types';
 
-const LABELS: Record<string, string> = {
-  working: 'Working…',
-  searching: 'Searching…',
-  solving: 'Solving…',
-  listening: 'Listening…',
-  connecting: 'Connecting…',
-  weaving: 'Weaving…',
-  composing: 'Composing…',
-  breathing: 'Thinking…',
-  shaping: 'Shaping…'
-};
+/** Props for the ThinkingOrb React component. */
+export interface ThinkingOrbProps extends Omit<CanvasHTMLAttributes<HTMLCanvasElement>, 'style'> {
+  /** Which animation to show. @default 'working' */
+  state?: OrbState;
+
+  /** Tuned size preset — 64 or 20 CSS px. @default 64 */
+  size?: OrbSize;
+
+  /** Theme mode; `auto` detects from the host project. @default 'auto' */
+  theme?: OrbTheme;
+
+  /**
+   * Animation speed multiplier on top of the preset's baked speed.
+   * @default 1
+   */
+  speed?: number;
+
+  /** Freeze the animation on the current frame. @default false */
+  paused?: boolean;
+
+  style?: CSSProperties;
+}
 
 export function ThinkingOrb({
   state = 'working',

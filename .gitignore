@@ -2,6 +2,9 @@ node_modules
 dist
 dist-demo
 dist-playground
+.expo
+example/ios
+example/android
 *.tsbuildinfo
 .DS_Store
 *.log
