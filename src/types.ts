@@ -1,7 +1,7 @@
 import type { CSSProperties, CanvasHTMLAttributes } from 'react';
 
 /**
- * The nine shipped states — each a hand-tuned animation:
+ * The ten shipped states — each a hand-tuned animation:
  * - `working`    — particles on tilted orbits
  * - `searching`  — a scan meridian sweeps a dotted globe
  * - `solving`    — bands scramble in quarter turns, then click back
@@ -11,6 +11,7 @@ import type { CSSProperties, CanvasHTMLAttributes } from 'react';
  * - `composing`  — an undulating multi-band sash
  * - `breathing`  — a face-on ring slowly morphing
  * - `shaping`    — a dotted outline morphs circle → triangle → square
+ * - `cleaning`   — the body wrings about its axis, crown leading, base trailing
  */
 export type OrbState =
   | 'working'
@@ -21,7 +22,8 @@ export type OrbState =
   | 'weaving'
   | 'composing'
   | 'breathing'
-  | 'shaping';
+  | 'shaping'
+  | 'cleaning';
 
 /**
  * Rendered size in CSS pixels. Exactly two tuned presets ship:

@@ -1,7 +1,7 @@
 {
   "name": "thinking-orbs",
   "version": "0.2.0",
-  "description": "Dotted thought-orb loading indicators for AI & agent UIs — nine tuned states, two sizes, auto dark/light",
+  "description": "Dotted thought-orb loading indicators for AI & agent UIs — ten tuned states, two sizes, auto dark/light",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.es.js",
@@ -69,5 +69,8 @@
   "bugs": {
     "url": "https://github.com/Jakubantalik/thinking-orbs/issues"
   },
-  "homepage": "https://orbs.jakubantalik.com"
+  "homepage": "https://orbs.jakubantalik.com",
+  "allowScripts": {
+    "esbuild@0.21.5": true
+  }
 }

@@ -8,6 +8,7 @@ import { drawGlobe, drawRubik, drawWave } from './lattice';
 import { drawMorph } from './morph';
 import { drawOrbits } from './orbits';
 import { drawRibbon } from './ribbon';
+import { drawTwist } from './twist';
 import { drawWeb } from './web';
 
 export const MODE_DRAWS: Record<ModeKey, ModeDraw> = {
@@ -15,6 +16,7 @@ export const MODE_DRAWS: Record<ModeKey, ModeDraw> = {
   globe: drawGlobe,
   rubik: drawRubik,
   wave: drawWave,
+  twist: drawTwist,
   web: drawWeb,
   braid: drawBraid,
   ribbon: drawRibbon,

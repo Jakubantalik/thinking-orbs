@@ -14,7 +14,8 @@ const STATES: OrbState[] = [
   'weaving',
   'composing',
   'breathing',
-  'shaping'
+  'shaping',
+  'cleaning'
 ];
 const SIZES: OrbSize[] = [64, 20];
 
