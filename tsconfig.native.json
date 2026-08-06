@@ -8,5 +8,5 @@
     "types": []
   },
   "include": ["src/engine", "src/native", "src/presets.ts", "src/types.ts", "src/labels.ts"],
-  "exclude": ["src/native/ThinkingOrb.tsx"]
+  "exclude": ["src/native/ThinkingOrb.tsx", "src/native/index.d.ts"]
 }
