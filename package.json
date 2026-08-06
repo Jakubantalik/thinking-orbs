@@ -69,8 +69,5 @@
   "bugs": {
     "url": "https://github.com/Jakubantalik/thinking-orbs/issues"
   },
-  "homepage": "https://orbs.jakubantalik.com",
-  "allowScripts": {
-    "esbuild@0.21.5": true
-  }
+  "homepage": "https://orbs.jakubantalik.com"
 }

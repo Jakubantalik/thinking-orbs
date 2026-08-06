@@ -4,11 +4,10 @@
 // trails, and then the whole thing unwinds back along exactly the same
 // path. That is the agitator stroke of a washing machine — a dwell at each
 // reversal, a whip through the middle — and the lag is what turns a plain
-// spin into visible torsion. Loose specks tumble in the current a beat
-// behind the shell again, so it reads as something being worked, not spun.
+// spin into visible torsion.
 
 import type { Dot, ModeDraw } from './types';
-import { fibDir, frac, hashD, makeProj, paint, radiusScale } from './core';
+import { frac, makeProj, paint, radiusScale } from './core';
 
 /**
  * Phase warp: parks the phase at each extreme for `d` of a cycle, then
@@ -87,30 +86,6 @@ export const drawTwist: ModeDraw = (ctx, size, t, dark, o) => {
         white: (o.inkFar ?? 0.62) - (o.inkSpan ?? 0.54) * depth - (o.inkShear ?? 0.1) * shear
       });
     }
-  }
-
-  // suds: specks loose inside the drum. `slip` drags them further down the
-  // lag curve than any shell ring, and a slow bob keeps them alive through
-  // the dwell, so the frame never fully freezes at a reversal.
-  const sudsN = o.sudsN ?? 14;
-  const slip = o.slip ?? 0.3;
-  for (let i = 0; i < sudsN; i++) {
-    const d = fibDir(i, sudsN);
-    const bob = 0.14 * Math.sin(t * 0.42 + hashD(i, 9.4) * 2 * Math.PI);
-    const y = Math.max(-0.9, Math.min(0.9, d[1] * 0.86 + bob));
-    const u = (y + 1) / 2;
-    const rr = (0.3 + 0.62 * hashD(i, 3.1)) * Math.sqrt(Math.max(0, 1 - y * y));
-    const a = Math.atan2(d[2], d[0]) + turnAt(u - slip);
-    const [px, py, z] = pt(Math.cos(a) * rr, y, Math.sin(a) * rr);
-    const depth = (z + 1) / 2;
-    dots.push({
-      x: px,
-      y: py,
-      z,
-      r: ((o.sudR ?? 1.3) + (o.sudRDepth ?? 1.5) * depth) * rs,
-      white: 0.32 - 0.26 * depth,
-      a: 0.55 + 0.45 * depth
-    });
   }
   paint(ctx, dots, dark, o.rMin);
 };

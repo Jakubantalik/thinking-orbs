@@ -14,7 +14,7 @@ const COUNT_PAIRS: ReadonlyArray<readonly [string, string]> = [
   ['rings', 'lonDensity'],
   ['lanes', 'segs']
 ];
-const COUNT_KEYS = ['orbitN', 'ghostN', 'nodeN', 'strandN', 'signals', 'sudsN'] as const;
+const COUNT_KEYS = ['orbitN', 'ghostN', 'nodeN', 'strandN', 'signals'] as const;
 const ICON_DENSITY_KEYS = ['iconD'] as const;
 
 // Every key that sets a dot's rendered radius — scaling all of them keeps
@@ -29,9 +29,7 @@ const RADIUS_KEYS = [
   'partR',
   'partRDepth',
   'nodeR',
-  'nodeRDepth',
-  'sudR',
-  'sudRDepth'
+  'nodeRDepth'
 ] as const;
 
 export function scaleCounts(opts: ModeOpts, scale: number): ModeOpts {
@@ -120,20 +118,16 @@ export const BASE_PROFILES: Record<string, ModeOpts> = {
   twist: {
     latRings: 16,
     lonDensity: 42,
-    sudsN: 14,
     amp: 1.2,
     rate: 0.149,
     lag: 0.17,
     dwell: 0.01937,
-    slip: 0.3,
     tilt: 0.34,
     drift: 0.07,
     shearRef: 0.24,
     rBase: 0.6,
     rDepth: 1.7,
     rShear: 0.32,
-    sudR: 1.3,
-    sudRDepth: 1.5,
     inkFar: 0.62,
     inkSpan: 0.54,
     inkShear: 0.1,
