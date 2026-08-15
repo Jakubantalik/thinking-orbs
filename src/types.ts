@@ -24,7 +24,7 @@ export type OrbState =
   | 'shaping';
 
 /**
- * Rendered size in CSS pixels. Exactly two tuned presets ship:
+ * Tuned size preset. Exactly two presets ship:
  * 64 (chat-avatar scale) and 20 (inline-text scale). Each size carries
  * its own dot count, dot size and speed tuning — they are separate
  * designs, not a scale factor.
@@ -56,6 +56,13 @@ export interface ThinkingOrbProps extends Omit<CanvasHTMLAttributes<HTMLCanvasEl
 
   /** Tuned size preset — 64 or 20 CSS px. @default 64 */
   size?: OrbSize;
+
+  /**
+   * Logical canvas size in CSS pixels. Keeps the selected preset's tuning
+   * while rendering directly at a larger or smaller display size.
+   * @default size
+   */
+  renderSize?: number;
 
   /** Theme mode; `auto` detects from the host project. @default 'auto' */
   theme?: OrbTheme;

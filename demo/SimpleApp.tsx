@@ -26,7 +26,7 @@ export function App() {
   return (
     <div className="page">
       <header>
-        <span className="mono">THINKING-ORBS · SIX STATES · TWO SIZES · AUTO THEME</span>
+        <span className="mono">THINKING-ORBS · NINE STATES · TWO PRESETS · CUSTOM SIZES</span>
         <button className="mono theme-btn" type="button" onClick={() => setDark((d) => !d)}>
           {dark ? 'LIGHT' : 'DARK'}
         </button>
