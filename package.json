@@ -38,6 +38,7 @@
     "build": "vite build",
     "build:demo": "vite build --config vite.config.demo.ts",
     "typecheck": "tsc --noEmit",
+    "verify:render-size": "tsx scripts/verify-render-size.ts",
     "spec": "tsx scripts/extract-spec.ts && tsx scripts/extract-golden.ts",
     "prepublishOnly": "npm run build"
   },

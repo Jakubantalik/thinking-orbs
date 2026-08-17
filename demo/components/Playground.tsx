@@ -20,9 +20,11 @@ const SIZES: OrbSize[] = [64, 20];
 
 const SPEED_MIN = 25;
 const SPEED_MAX = 300;
+const RENDER_SIZE_MIN = 64;
+const RENDER_SIZE_MAX = 320;
 
-function buildSnippet(state: OrbState, size: OrbSize, speed: number) {
-  const props = [`state="${state}"`, `size={${size}}`];
+function buildSnippet(state: OrbState, size: OrbSize, renderSize: number, speed: number) {
+  const props = [`state="${state}"`, `size={${size}}`, `renderSize={${renderSize}}`];
   if (speed !== 100) props.push(`speed={${(speed / 100).toFixed(2)}}`);
   return `import { ThinkingOrb } from 'thinking-orbs';\n\n<ThinkingOrb ${props.join(' ')} />`;
 }
@@ -54,13 +56,15 @@ export function Playground({
 }) {
   const [state, setState] = useState<OrbState>('listening');
   const [size, setSize] = useState<OrbSize>(64);
+  const [renderSize, setRenderSize] = useState(240);
   // Playground starts paused so the page loads quietly; the PlayPauseToggle
   // below only flips this local state, so the surrounding Examples keep
   // auto-playing regardless.
   const [paused, setPaused] = useState(true);
 
-  const snippet = buildSnippet(state, size, speed);
+  const snippet = buildSnippet(state, size, renderSize, speed);
   const fillPct = ((speed - SPEED_MIN) / (SPEED_MAX - SPEED_MIN)) * 100;
+  const renderSizePct = ((renderSize - RENDER_SIZE_MIN) / (RENDER_SIZE_MAX - RENDER_SIZE_MIN)) * 100;
 
   return (
     <section className="w-full flex flex-col gap-1.5 mb-12" aria-label="Interactive playground">
@@ -109,11 +113,29 @@ export function Playground({
               />
             </div>
           </div>
+
+          <div className="flex flex-col gap-[9px] min-w-[100px] w-[140px] max-sm:w-full">
+            <span className="text-xs font-normal leading-[14px] text-(--text-muted)">Render size</span>
+            <div className="strength-track relative w-full h-9 rounded-lg bg-(--strength-bg) shadow-(--strength-shadow) overflow-hidden cursor-grab active:cursor-grabbing hover:bg-(--strength-hover)">
+              <div className="absolute top-0 left-0 bottom-0 rounded-lg bg-(--strength-fill-bg) shadow-(--strength-shadow) transition-[width] duration-[80ms] ease-out pointer-events-none" style={{ width: `${renderSizePct}%` }} />
+              <span className="absolute top-0 left-[11px] h-full flex items-center text-[11px] font-normal leading-[14px] text-(--text-muted) whitespace-nowrap pointer-events-none z-[1]">{renderSize}px</span>
+              <input
+                className="strength-input appearance-none absolute inset-0 w-full h-full m-0 p-0 bg-transparent cursor-grab opacity-0 z-[2] active:cursor-grabbing"
+                type="range"
+                min={RENDER_SIZE_MIN}
+                max={RENDER_SIZE_MAX}
+                step={8}
+                value={renderSize}
+                onChange={(e) => setRenderSize(Number(e.target.value))}
+                aria-label="Render size"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
       <div className="relative w-full min-h-[304px] rounded-[10px] bg-(--surface) flex flex-col items-center justify-center p-12 gap-6 max-sm:p-6">
-        <ThinkingOrb key={`${state}-${size}`} state={state} size={size} speed={speed / 100} paused={paused} />
+        <ThinkingOrb key={`${state}-${size}-${renderSize}`} state={state} size={size} renderSize={renderSize} speed={speed / 100} paused={paused} />
         <PlayPauseToggle playing={!paused} onToggle={() => setPaused((p) => !p)} className="max-sm:absolute max-sm:bottom-6 max-sm:left-1/2 max-sm:-translate-x-1/2" />
       </div>
 

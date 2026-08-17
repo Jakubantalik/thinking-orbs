@@ -25,6 +25,7 @@ const LABELS: Record<string, string> = {
 export function ThinkingOrb({
   state = 'working',
   size = 64,
+  renderSize,
   theme = 'auto',
   speed = 1,
   paused = false,
@@ -35,13 +36,15 @@ export function ThinkingOrb({
   const ref = useRef<HTMLCanvasElement | null>(null);
   const dark = useResolvedDark(theme, ref);
   const reduced = useReducedMotion();
+  // `size` selects the tuned profile; `renderSize` controls the actual canvas.
+  const outputSize = renderSize != null && Number.isFinite(renderSize) && renderSize > 0 ? renderSize : size;
 
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
     const dpr = Math.min(2, (typeof devicePixelRatio !== 'undefined' && devicePixelRatio) || 1);
-    canvas.width = Math.round(size * dpr);
-    canvas.height = Math.round(size * dpr);
+    canvas.width = Math.round(outputSize * dpr);
+    canvas.height = Math.round(outputSize * dpr);
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -51,8 +54,8 @@ export function ThinkingOrb({
 
     const frame = (tSec: number) => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, size, size);
-      draw(ctx, size, tSec, dark, opts);
+      ctx.clearRect(0, 0, outputSize, outputSize);
+      draw(ctx, outputSize, tSec, dark, opts);
     };
 
     // reduced motion → one static, deterministic frame
@@ -103,14 +106,14 @@ export function ThinkingOrb({
       io?.disconnect();
       document.removeEventListener('visibilitychange', onVis);
     };
-  }, [state, size, dark, speed, paused, reduced]);
+  }, [state, size, outputSize, dark, speed, paused, reduced]);
 
   return (
     <canvas
       ref={ref}
       role="img"
       aria-label={ariaLabel ?? LABELS[state]}
-      style={{ width: size, height: size, display: 'block', ...style }}
+      style={{ width: outputSize, height: outputSize, display: 'block', ...style }}
       {...rest}
     />
   );

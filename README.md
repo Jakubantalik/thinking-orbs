@@ -1,6 +1,6 @@
 # thinking-orbs
 
-Dotted thought-orb loading indicators for AI & agent UIs. Nine hand-tuned animated states, each shipped at two purpose-tuned sizes, rendered on a plain 2D canvas — no WebGL, no filters, works identically in Chrome, Safari and Firefox.
+Dotted thought-orb loading indicators for AI & agent UIs. Nine hand-tuned animated states, each shipped with two purpose-tuned presets and customizable render sizes, rendered on a plain 2D canvas — no WebGL, no filters, works identically in Chrome, Safari and Firefox.
 
 [Live demo](https://orbs.jakubantalik.com) · [Repository](https://github.com/Jakubantalik/thinking-orbs) · [Report an issue](https://github.com/Jakubantalik/thinking-orbs/issues)
 
@@ -45,6 +45,12 @@ Two tuned presets — separate designs, not a scale factor. `64` for chat-avatar
 <ThinkingOrb state="working" size={20} />
 ```
 
+Use `renderSize` when the orb needs to occupy a larger or smaller surface. The selected preset still controls its density and motion, while the canvas is rendered directly at the requested logical size:
+
+```tsx
+<ThinkingOrb state="composing" size={64} renderSize={320} />
+```
+
 ## Theme
 
 Strictly monochrome — light ink for dark backgrounds, dark ink for light backgrounds — with the mode picked automatically from the host project:
@@ -67,6 +73,7 @@ Strictly monochrome — light ink for dark backgrounds, dark ink for light backg
 <ThinkingOrb
   state="solving"
   size={20}
+  renderSize={160}
   speed={1.5}          // multiplier on the preset's baked speed
   paused={false}       // freeze on the current frame
   aria-label="Analysing repository…"  // overrides the per-state default
