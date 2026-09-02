@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src/orb-controller.ts", "src/types.ts", "test", "mitosis.config.ts"]
+}

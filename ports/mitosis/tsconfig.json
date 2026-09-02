@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["node"],
+    "paths": {
+      "thinking-orbs/engine": ["../../src/engine/index.ts"],
+      "react": ["./node_modules/@types/react/index.d.ts"]
+    }
+  },
+  "include": ["src", "test", "mitosis.config.ts"]
+}

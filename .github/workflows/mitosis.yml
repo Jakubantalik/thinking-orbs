@@ -1,0 +1,37 @@
+name: Mitosis port CI
+
+# Verifies the Mitosis-authored ThinkingOrb port end to end: real Mitosis
+# generation to all four frameworks, the source unit + geometry tests,
+# source typecheck, real toolchain compile of every generated target, and the
+# npm-pack/consumer import check.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'ports/mitosis/**'
+      - '.github/workflows/mitosis.yml'
+  pull_request:
+    paths:
+      - 'ports/mitosis/**'
+  workflow_dispatch:
+
+jobs:
+  mitosis-port:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ports/mitosis
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ports/mitosis/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm run compile:check
+      - run: npm run consumer:check

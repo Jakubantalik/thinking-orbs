@@ -184,6 +184,36 @@ Layout mirrors `BorderBeamKit` (SPM `Package.swift`, `Sources`, `Tests`,
   golden tests" whenever web tunings change (the mini-page → bake → ship loop
   now ends with two extra generated files, nothing more).
 
+## Phase 5 — Mitosis meta-port (`ports/mitosis`) ✅ DONE
+
+A single Mitosis `ThinkingOrb.lite.tsx` compiles to React, Vue, Svelte and
+Solid. Rather than hand-transcribe the renderer per framework, the whole
+imperative surface lives in a framework-neutral `orb-controller.ts` (copied
+verbatim into every output), so all four generated components are thin
+canvas shims over the same `thinking-orbs/engine` geometry.
+
+- **Design:** component owns only the canvas + ref + prop→props wiring; the
+  controller owns the shared clock, DPR cap, live theme auto-detect,
+  reduced-motion static frame, and offscreen/tab pause. Behaviour parity is
+  by construction — every target drives the same controller object.
+- **Geometry parity:** `test/orb-geometry.test.ts` proves the reduced-motion
+  static frame reproduces `spec/orbs-golden.json` to `1e-4` for all
+  9 states × 2 sizes, so the port cannot drift from the shipping pixels.
+- **Real compile checks, not string greps:** `npm run compile:check` builds
+  every generated target through its official toolchain
+  (`@vitejs/plugin-react`, `@vitejs/plugin-vue`, `@sveltejs/vite-plugin-svelte`,
+  `vite-plugin-solid`). `npm run consumer:check` goes further: `npm pack`s the
+  port, installs the tarball, and imports every framework subpath through the
+  `exports` map.
+- **Generated-output fix:** the Mitosis React generator folds the entire
+  component onto the same physical line as a leading `//` comment, commenting
+  the whole program out — the real React compile caught it (`"default" is not
+  exported`). The `.lite.tsx` source therefore must not start with a leading
+  comment; context lives in `ports/mitosis/README.md` instead.
+- **Live reduced-motion test:** `test/orb-controller.test.ts` drives the
+  `prefers-reduced-motion: reduce` MediaQueryList listener at runtime and
+  asserts the loop stops, a static frame is drawn, and the loop resumes.
+
 ## Findings worth keeping
 
 - **Worklets are unnecessary here, and the plan was wrong to want them.**

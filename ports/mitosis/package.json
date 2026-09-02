@@ -1,0 +1,94 @@
+{
+  "name": "thinking-orbs-mitosis",
+  "version": "0.1.0",
+  "description": "ThinkingOrb authored in Mitosis and compiled to React, Vue, Svelte and Solid over the framework-neutral thinking-orbs/engine",
+  "type": "module",
+  "private": true,
+  "main": "./output/react/src/ThinkingOrb.tsx",
+  "module": "./output/react/src/ThinkingOrb.tsx",
+  "types": "./output/react/src/ThinkingOrb.tsx",
+  "exports": {
+    ".": {
+      "types": "./output/react/src/ThinkingOrb.tsx",
+      "import": "./output/react/src/ThinkingOrb.tsx"
+    },
+    "./react": {
+      "types": "./output/react/src/ThinkingOrb.tsx",
+      "import": "./output/react/src/ThinkingOrb.tsx"
+    },
+    "./vue": {
+      "types": "./output/vue/src/ThinkingOrb.vue",
+      "import": "./output/vue/src/ThinkingOrb.vue"
+    },
+    "./svelte": {
+      "types": "./output/svelte/src/ThinkingOrb.svelte",
+      "import": "./output/svelte/src/ThinkingOrb.svelte"
+    },
+    "./solid": {
+      "types": "./output/solid/src/ThinkingOrb.tsx",
+      "import": "./output/solid/src/ThinkingOrb.tsx"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "output"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "mitosis": "mitosis build",
+    "postgenerate": "node scripts/post-generate.mjs",
+    "build": "npm run mitosis && npm run postgenerate",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.typecheck.json --noEmit",
+    "compile:check": "node scripts/compile-checks.mjs",
+    "consumer:check": "node scripts/consumer-check.mjs"
+  },
+  "dependencies": {
+    "thinking-orbs": "^0.3.1"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "vue": ">=3.3.0",
+    "svelte": ">=4.0.0",
+    "solid-js": ">=1.8.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    },
+    "svelte": {
+      "optional": true
+    },
+    "solid-js": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@builder.io/mitosis": "0.14.0",
+    "@builder.io/mitosis-cli": "0.14.0",
+    "@sveltejs/vite-plugin-svelte": "^6.2.4",
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "@vitejs/plugin-vue": "^6.0.2",
+    "@vue/compiler-sfc": "^3.5.0",
+    "@vue/test-utils": "^2.4.0",
+    "babel-preset-solid": "^1.9.0",
+    "jsdom": "^30.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "solid-js": "^1.9.0",
+    "svelte": "^5.0.0",
+    "typescript": "^5.3.0",
+    "vite": "^7.3.0",
+    "vite-plugin-solid": "^2.11.0",
+    "vitest": "^3.2.7",
+    "vue": "^3.5.0"
+  },
+  "license": "MIT"
+}
