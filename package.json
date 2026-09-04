@@ -27,6 +27,16 @@
         "default": "./dist/engine.cjs"
       }
     },
+    "./tui": {
+      "import": {
+        "types": "./dist/tui/index.d.ts",
+        "default": "./dist/tui.es.js"
+      },
+      "require": {
+        "types": "./dist/tui/index.d.ts",
+        "default": "./dist/tui.cjs"
+      }
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -38,8 +48,10 @@
     "build": "vite build",
     "build:demo": "vite build --config vite.config.demo.ts",
     "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts",
     "spec": "tsx scripts/extract-spec.ts && tsx scripts/extract-golden.ts",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepare": "node -e \"import('node:fs').then(fs=>fs.promises.access('dist/tui.es.js')).catch(()=>import('node:child_process').then(cp=>{const r=cp.spawnSync('npm',['run','build'],{stdio:'inherit'});if(r.status)process.exit(r.status??1)}))\""
   },
   "peerDependencies": {
     "react": ">=18.0.0"

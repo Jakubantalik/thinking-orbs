@@ -75,6 +75,41 @@ Strictly monochrome — light ink for dark backgrounds, dark ink for light backg
 
 All other `<canvas>` props (`className`, `style`, `data-*`, …) pass through.
 
+## Terminal / TUI
+
+The `thinking-orbs/tui` entry point projects the same pure particle geometry
+onto Unicode Braille cells. It has no React, DOM, Canvas, ANSI, or terminal
+framework dependency:
+
+```ts
+import { renderTuiOrb } from 'thinking-orbs/tui';
+
+const frame = renderTuiOrb('listening', {
+  columns: 16,
+  rows: 8,
+  time: performance.now() / 1000,
+  theme: 'dark'
+});
+
+process.stdout.write(frame.lines.join('\n'));
+```
+
+`time` is elapsed seconds; advance it from the host TUI's existing render
+clock. All nine states use their browser preset and exact geometry. The
+returned `intensities` matrix provides normalized per-cell energy for a host
+theme, and `paint(glyph, intensity)` can apply ANSI or framework-native color
+without coupling the package to one terminal stack:
+
+```ts
+const frame = renderTuiOrb('connecting', {
+  paint: (glyph, intensity) => theme.fg(gray(intensity), glyph)
+});
+```
+
+Rows and columns are fixed for every frame, so animation never moves the
+surrounding layout. `threshold` can make the Braille projection sparser or
+denser for a terminal's font and contrast.
+
 ## Accessibility & performance
 
 - `role="img"` with a sensible per-state `aria-label` out of the box.

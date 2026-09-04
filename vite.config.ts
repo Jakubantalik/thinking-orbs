@@ -15,10 +15,11 @@ export default defineConfig({
   ],
   build: {
     lib: {
-      // `engine` is the React-free geometry surface the native ports consume.
+      // `engine` exposes geometry; `tui` projects it onto Unicode Braille.
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
-        engine: resolve(__dirname, 'src/engine/index.ts')
+        engine: resolve(__dirname, 'src/engine/index.ts'),
+        tui: resolve(__dirname, 'src/tui/index.ts')
       },
       name: 'ThinkingOrbs',
       // The package is type:module, so the CJS bundle needs a real `.cjs`
