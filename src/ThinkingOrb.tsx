@@ -39,11 +39,18 @@ export function ThinkingOrb({
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
-    const dpr = Math.min(2, (typeof devicePixelRatio !== 'undefined' && devicePixelRatio) || 1);
-    canvas.width = Math.round(size * dpr);
-    canvas.height = Math.round(size * dpr);
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+
+    let dpr = 1;
+    const syncBackingStore = () => {
+      dpr = Math.min(2, (typeof devicePixelRatio !== 'undefined' && devicePixelRatio) || 1);
+      const w = Math.round(size * dpr);
+      const h = Math.round(size * dpr);
+      if (canvas.width !== w) canvas.width = w;
+      if (canvas.height !== h) canvas.height = h;
+    };
+    syncBackingStore();
 
     const { mode, speed: baseSpeed, opts } = resolvePreset(state, size);
     const draw = MODE_DRAWS[mode];
@@ -55,10 +62,26 @@ export function ThinkingOrb({
       draw(ctx, size, tSec, dark, opts);
     };
 
+    let dprMq: MediaQueryList | null = null;
+    const bindDprListener = () => {
+      if (typeof matchMedia === 'undefined' || typeof devicePixelRatio === 'undefined') return;
+      dprMq?.removeEventListener('change', onDprChange);
+      dprMq = matchMedia(`(resolution: ${devicePixelRatio}dppx)`);
+      dprMq.addEventListener('change', onDprChange);
+    };
+    const onDprChange = () => {
+      syncBackingStore();
+      frame(reduced ? 0.6 : (performance.now() / 1000) * effSpeed);
+      bindDprListener();
+    };
+    bindDprListener();
+
     // reduced motion → one static, deterministic frame
     if (reduced) {
       frame(0.6);
-      return;
+      return () => {
+        dprMq?.removeEventListener('change', onDprChange);
+      };
     }
 
     let raf = 0;
@@ -101,6 +124,7 @@ export function ThinkingOrb({
     return () => {
       stop();
       io?.disconnect();
+      dprMq?.removeEventListener('change', onDprChange);
       document.removeEventListener('visibilitychange', onVis);
     };
   }, [state, size, dark, speed, paused, reduced]);
