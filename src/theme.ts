@@ -48,10 +48,19 @@ export function useResolvedDark(theme: OrbTheme, hostRef: RefObject<Element | nu
     const onMq = () => resolve();
     mq?.addEventListener('change', onMq);
 
-    // live app-level toggles: watch class/data-theme flips on ancestors
+    // live app-level toggles: watch class/data-theme flips on ancestors only
     let mo: MutationObserver | null = null;
     if (typeof MutationObserver !== 'undefined' && hostRef.current) {
-      mo = new MutationObserver(resolve);
+      mo = new MutationObserver((records) => {
+        const host = hostRef.current;
+        if (!host) return;
+        for (const r of records) {
+          if (r.target instanceof Node && r.target.contains(host)) {
+            resolve();
+            break;
+          }
+        }
+      });
       mo.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ['class', 'data-theme'],
