@@ -12,7 +12,7 @@ export const PlayPauseToggle = forwardRef<HTMLButtonElement, { playing: boolean;
         data-state={state}
         onClick={onToggle}
         aria-pressed={playing}
-        aria-label={playing ? 'Pause shader animation' : 'Play shader animation'}
+        aria-label={playing ? 'Pausar animação' : 'Reproduzir animação'}
       >
         <span className="t-icon" data-icon="a"><PlayIcon /></span>
         <span className="t-icon" data-icon="b"><PauseIcon /></span>

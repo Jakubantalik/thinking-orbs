@@ -11,12 +11,12 @@ import { useReducedMotion, useResolvedDark } from './theme';
 import type { ThinkingOrbProps } from './types';
 
 const LABELS: Record<string, string> = {
-  working: 'Working…',
-  searching: 'Searching…',
-  solving: 'Solving…',
-  listening: 'Listening…',
-  composing: 'Composing…',
-  shaping: 'Shaping…'
+  working: 'Carregando…',
+  searching: 'Buscando…',
+  solving: 'Resolvendo…',
+  listening: 'Ouvindo…',
+  composing: 'Em progresso…',
+  shaping: 'Estruturando…'
 };
 
 export function ThinkingOrb({

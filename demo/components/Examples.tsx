@@ -5,7 +5,15 @@ import { ThinkingOrb } from '../../src';
 const listeningPillClass =
   'inline-flex items-center gap-3 w-[270px] h-[74px] pl-[9px] pr-8 rounded-full bg-(--pill-fill) shadow-(--pill-stroke) text-(--pill-fg) text-lg leading-6 font-inherit cursor-default';
 
-const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const STATE_LABELS: Record<OrbState, string> = {
+  working: 'Carregando',
+  searching: 'Buscando',
+  solving: 'Resolvendo',
+  listening: 'Ouvindo',
+  composing: 'Em progresso',
+  shaping: 'Estruturando',
+};
+
 const chipClass =
   'inline-flex items-center gap-2 h-9 pl-2 pr-3.5 rounded-full bg-(--pill-fill) shadow-(--pill-stroke) text-(--pill-fg) text-xs leading-[14px] font-inherit cursor-default';
 
@@ -15,8 +23,8 @@ const CHIP_STATES: OrbState[] = ['listening', 'working', 'searching', 'shaping']
 const LARGE_CHIPS = new Set<OrbState>(['working', 'searching']);
 
 const HERO_PILLS: Array<{ state: OrbState; label: string }> = [
-  { state: 'solving', label: 'Solving….' },
-  { state: 'composing', label: 'Thinking….' },
+  { state: 'solving', label: 'Resolvendo...' },
+  { state: 'composing', label: 'Em progresso...' },
 ];
 
 export function Examples({
@@ -37,7 +45,7 @@ export function Examples({
 }) {
   const surface = debug ? 'bg-transparent' : 'bg-(--hero-surface)';
   return (
-    <section className="w-full flex flex-col gap-3 mb-12" aria-label="Component demonstrations">
+    <section className="w-full flex flex-col gap-3 mb-12" aria-label="Demonstrações dos componentes">
       {/* Two hero pill mocks, side by side */}
       <div className="grid grid-cols-2 gap-3 max-sm:grid-cols-1">
         {HERO_PILLS.map(({ state, label }) => (
@@ -64,7 +72,8 @@ export function Examples({
       <div className="grid grid-cols-2 gap-3 [grid-auto-rows:151px] max-sm:grid-cols-1 max-sm:auto-rows-auto">
         {CHIP_STATES.map((state) => {
           const large = !smallAll && (bigChips || LARGE_CHIPS.has(state));
-          const label = large ? `${cap(state)}….` : `Agent ${state}…`;
+          const stateLabel = STATE_LABELS[state];
+          const label = large ? `${stateLabel}...` : `Agente ${stateLabel.toLocaleLowerCase('pt-BR')}...`;
           return (
           <div
             key={state}

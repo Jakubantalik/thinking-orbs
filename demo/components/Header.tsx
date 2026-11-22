@@ -25,7 +25,7 @@ export function Header({
 }) {
   return (
     <header className="relative w-full h-[218px] text-center flex flex-col items-center justify-end pb-[53px] max-sm:h-auto max-sm:min-h-[180px] max-sm:pt-[60px] max-sm:pb-8">
-      <nav className="absolute top-4 right-0 flex items-center gap-4 max-sm:top-3" aria-label="External links">
+      <nav className="absolute top-4 right-0 flex items-center gap-4 max-sm:top-3" aria-label="Links externos">
         {/* Dev-only: hide the hero surface fill to inspect the orbs. Stripped
             from production builds via import.meta.env.DEV. */}
         {import.meta.env.DEV && (
@@ -34,7 +34,7 @@ export function Header({
             onClick={onToggleDebug}
             aria-pressed={debug}
             className={`${iconBtnClass} font-[Roboto_Mono,monospace] text-[11px] ${debug ? 'bg-(--icon-btn-hover) text-(--title-color)' : 'text-(--footer-muted)'}`}
-            title="Toggle hero surface fill (dev only)"
+            title="Alternar o fundo das demonstrações (somente desenvolvimento)"
           >
             BG
           </button>
@@ -45,7 +45,7 @@ export function Header({
             onClick={onToggleBigChips}
             aria-pressed={bigChips}
             className={`${iconBtnClass} font-[Roboto_Mono,monospace] text-[11px] ${bigChips ? 'bg-(--icon-btn-hover) text-(--title-color)' : 'text-(--footer-muted)'}`}
-            title="Render the small chips as large pills (dev only)"
+            title="Renderizar os chips pequenos como pílulas grandes (somente desenvolvimento)"
           >
             LG
           </button>
@@ -56,15 +56,15 @@ export function Header({
             onClick={onToggleSmallAll}
             aria-pressed={smallAll}
             className={`${iconBtnClass} font-[Roboto_Mono,monospace] text-[11px] ${smallAll ? 'bg-(--icon-btn-hover) text-(--title-color)' : 'text-(--footer-muted)'}`}
-            title="Force every pill to the small chip style (dev only)"
+            title="Forçar todas as pílulas para o estilo de chip pequeno (somente desenvolvimento)"
           >
             SM
           </button>
         )}
-        <a className={iconBtnClass} href="https://github.com/Jakubantalik/thinking-orbs" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
+        <a className={iconBtnClass} href="https://github.com/Jakubantalik/thinking-orbs" target="_blank" rel="noopener noreferrer" aria-label="Repositório no GitHub">
           <GitHubIcon />
         </a>
-        <a className={iconBtnClass} href="https://x.com/jakubantalik" target="_blank" rel="noopener noreferrer" aria-label="Follow on X (Twitter)">
+        <a className={iconBtnClass} href="https://x.com/jakubantalik" target="_blank" rel="noopener noreferrer" aria-label="Seguir no X (Twitter)">
           <XIcon />
         </a>
       </nav>
@@ -79,7 +79,7 @@ export function Header({
         />
       </div>
       <h1 className="text-[22px] font-medium leading-[30px] text-(--title-color)">Thinking orbs</h1>
-      <p className="text-sm font-normal leading-[21px] text-(--subtitle-color) opacity-50">Animated thinking orb component</p>
+      <p className="text-sm font-normal leading-[21px] text-(--subtitle-color) opacity-50">Componente animado de orbe de pensamento</p>
     </header>
   );
 }

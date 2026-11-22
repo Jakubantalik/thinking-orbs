@@ -1,16 +1,16 @@
 # thinking-orbs
 
-Dotted thought-orb loading indicators for AI & agent UIs. Six hand-tuned animated states, each shipped at two purpose-tuned sizes, rendered on a plain 2D canvas — no WebGL, no filters, works identically in Chrome, Safari and Firefox.
+Indicadores pontilhados de carregamento para interfaces de IA e agentes. São seis estados animados ajustados manualmente, cada um disponível em dois tamanhos específicos e renderizado em um canvas 2D simples, sem WebGL e sem filtros. O resultado funciona da mesma forma no Chrome, Safari e Firefox.
 
-[Live demo](https://orbs.jakubantalik.com) · [Repository](https://github.com/Jakubantalik/thinking-orbs) · [Report an issue](https://github.com/Jakubantalik/thinking-orbs/issues)
+[Demonstração](https://orbs.jakubantalik.com) · [Repositório](https://github.com/Jakubantalik/thinking-orbs) · [Relatar um problema](https://github.com/Jakubantalik/thinking-orbs/issues)
 
-## Install
+## Instalação
 
 ```bash
 npm install thinking-orbs
 ```
 
-## Quick start
+## Início rápido
 
 ```tsx
 import { ThinkingOrb } from 'thinking-orbs';
@@ -20,65 +20,65 @@ function Status() {
 }
 ```
 
-## States
+## Estados
 
-Six verbs an agent can be doing, each a distinct animation:
+Seis ações que um agente pode estar executando, cada uma com uma animação distinta:
 
 ```tsx
-<ThinkingOrb state="working" />    {/* particles on tilted orbits */}
-<ThinkingOrb state="searching" />  {/* a scan meridian sweeps a dotted globe */}
-<ThinkingOrb state="solving" />    {/* bands scramble, then click back solved */}
-<ThinkingOrb state="listening" />  {/* a waveform rolls through the rings */}
-<ThinkingOrb state="composing" />  {/* an undulating multi-band sash */}
-<ThinkingOrb state="shaping" />    {/* dotted outline: circle → triangle → square */}
+<ThinkingOrb state="working" />    {/* partículas em órbitas inclinadas */}
+<ThinkingOrb state="searching" />  {/* um meridiano de varredura percorre um globo pontilhado */}
+<ThinkingOrb state="solving" />    {/* as faixas se embaralham e voltam à solução */}
+<ThinkingOrb state="listening" />  {/* uma onda percorre os anéis */}
+<ThinkingOrb state="composing" />  {/* uma faixa ondulada com múltiplas linhas */}
+<ThinkingOrb state="shaping" />    {/* contorno pontilhado: círculo → triângulo → quadrado */}
 ```
 
-## Sizes
+## Tamanhos
 
-Two tuned presets — separate designs, not a scale factor. `64` for chat-avatar scale, `20` for inline-text scale. Each carries its own dot count, dot size and speed tuning:
+Dois presets ajustados como desenhos independentes, não como simples fatores de escala. Use `64` para a escala de avatar do chat e `20` para elementos junto ao texto. Cada tamanho possui quantidade, dimensão e velocidade próprias para os pontos:
 
 ```tsx
 <ThinkingOrb state="working" size={64} />
 <ThinkingOrb state="working" size={20} />
 ```
 
-## Theme
+## Tema
 
-Strictly monochrome — light ink for dark backgrounds, dark ink for light backgrounds — with the mode picked automatically from the host project:
+Estritamente monocromático, com pontos claros em fundos escuros e pontos escuros em fundos claros. O modo é selecionado automaticamente a partir do projeto hospedeiro:
 
 ```tsx
-<ThinkingOrb theme="auto" />   {/* default — detects from the project */}
-<ThinkingOrb theme="dark" />   {/* pin: light dots for dark backgrounds */}
-<ThinkingOrb theme="light" />  {/* pin: dark dots for light backgrounds */}
+<ThinkingOrb theme="auto" />   {/* padrão: detecta a partir do projeto */}
+<ThinkingOrb theme="dark" />   {/* fixa pontos claros para fundos escuros */}
+<ThinkingOrb theme="light" />  {/* fixa pontos escuros para fundos claros */}
 ```
 
-`auto` resolves in three layers and updates live when any of them change:
+`auto` é resolvido em três camadas e atualizado em tempo real quando qualquer uma delas muda:
 
-1. an ancestor `data-theme="dark|light"` attribute or `dark`/`light` class (the Tailwind / shadcn convention), watched via `MutationObserver`;
-2. otherwise `prefers-color-scheme`, subscribed for live OS theme switches;
-3. SSR-safe — the canvas paints only on the client, after the theme has resolved.
+1. um atributo ancestral `data-theme="dark|light"` ou uma classe `dark`/`light`, seguindo a convenção do Tailwind e do shadcn, observado por `MutationObserver`;
+2. na ausência disso, `prefers-color-scheme`, com atualização em tempo real quando o tema do sistema operacional muda;
+3. compatibilidade com SSR: o canvas é desenhado apenas no cliente, depois que o tema é resolvido.
 
-## Other props
+## Outras propriedades
 
 ```tsx
 <ThinkingOrb
   state="solving"
   size={20}
-  speed={1.5}          // multiplier on the preset's baked speed
-  paused={false}       // freeze on the current frame
-  aria-label="Analysing repository…"  // overrides the per-state default
+  speed={1.5}          // multiplica a velocidade definida no preset
+  paused={false}       // congela a animação no quadro atual
+  aria-label="Analisando o repositório…"  // substitui o padrão do estado
 />
 ```
 
-All other `<canvas>` props (`className`, `style`, `data-*`, …) pass through.
+Todas as outras propriedades de `<canvas>` (`className`, `style`, `data-*`, …) são repassadas.
 
-## Accessibility & performance
+## Acessibilidade e desempenho
 
-- `role="img"` with a sensible per-state `aria-label` out of the box.
-- `prefers-reduced-motion: reduce` renders a static representative frame — no animation — and still follows the live theme.
-- Every instance pauses automatically when scrolled offscreen (`IntersectionObserver`) or when the tab is hidden, and resumes in phase — all instances share one clock.
-- Plain 2D canvas arcs only: no `ctx.filter`, no SVG filters, no WebGL — the same pixels everywhere, cheap on low-end devices. Device-pixel-ratio capped at 2.
+- `role="img"` com um `aria-label` adequado para cada estado por padrão.
+- `prefers-reduced-motion: reduce` renderiza um quadro estático representativo, sem animação, e continua acompanhando o tema em tempo real.
+- Cada instância pausa automaticamente quando sai da área visível (`IntersectionObserver`) ou quando a aba é ocultada. Ao voltar, ela retoma em fase, pois todas as instâncias compartilham o mesmo relógio.
+- Apenas arcos em canvas 2D simples, sem `ctx.filter`, filtros SVG ou WebGL. Os mesmos pixels são produzidos em todos os navegadores, com baixo custo até em dispositivos de entrada. A proporção de pixels do dispositivo é limitada a 2.
 
-## License
+## Licença
 
 MIT © Jakub Antalik

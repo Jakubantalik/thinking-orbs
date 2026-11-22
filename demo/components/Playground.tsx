@@ -7,6 +7,14 @@ import { PlayPauseToggle } from './PlayPauseToggle';
 
 const STATES: OrbState[] = ['working', 'searching', 'solving', 'listening', 'composing', 'shaping'];
 const SIZES: OrbSize[] = [64, 20];
+const STATE_LABELS: Record<OrbState, string> = {
+  working: 'Carregando',
+  searching: 'Buscando',
+  solving: 'Resolvendo',
+  listening: 'Ouvindo',
+  composing: 'Em progresso',
+  shaping: 'Estruturando',
+};
 
 const SPEED_MIN = 25;
 const SPEED_MAX = 300;
@@ -53,17 +61,17 @@ export function Playground({
   const fillPct = ((speed - SPEED_MIN) / (SPEED_MAX - SPEED_MIN)) * 100;
 
   return (
-    <section className="w-full flex flex-col gap-1.5 mb-12" aria-label="Interactive playground">
-      <h2 className="text-base font-normal leading-[34px] text-(--section-title-color)">Playground</h2>
+    <section className="w-full flex flex-col gap-1.5 mb-12" aria-label="Área de testes interativa">
+      <h2 className="text-base font-normal leading-[34px] text-(--section-title-color)">Área de testes</h2>
 
       <div className="flex flex-col gap-4 bg-(--panel-bg) rounded-[10px] p-4">
         <div className="flex items-end gap-6 max-sm:flex-col max-sm:items-stretch max-sm:gap-4">
-          <div className="flex flex-col gap-[9px] min-w-0" role="radiogroup" aria-label="Orb state">
-            <span className="text-xs font-normal leading-[14px] text-(--text-muted)">State</span>
+          <div className="flex flex-col gap-[9px] min-w-0" role="radiogroup" aria-label="Estado do orbe">
+            <span className="text-xs font-normal leading-[14px] text-(--text-muted)">Estado</span>
             <div className="flex gap-2 items-center flex-wrap">
               {STATES.map((s) => (
                 <TabBtn key={s} active={state === s} onClick={() => setState(s)}>
-                  {s.charAt(0).toUpperCase() + s.slice(1)}
+                  {STATE_LABELS[s]}
                 </TabBtn>
               ))}
             </div>
@@ -71,8 +79,8 @@ export function Playground({
         </div>
 
         <div className="flex items-end gap-6 max-sm:flex-col max-sm:items-stretch max-sm:gap-4">
-          <div className="flex flex-col gap-[9px] min-w-0" role="radiogroup" aria-label="Orb size">
-            <span className="text-xs font-normal leading-[14px] text-(--text-muted)">Size</span>
+          <div className="flex flex-col gap-[9px] min-w-0" role="radiogroup" aria-label="Tamanho do orbe">
+            <span className="text-xs font-normal leading-[14px] text-(--text-muted)">Tamanho</span>
             <div className="flex gap-2 items-center">
               {SIZES.map((s) => (
                 <TabBtn key={s} active={size === s} onClick={() => setSize(s)}>
@@ -83,7 +91,7 @@ export function Playground({
           </div>
 
           <div className="flex flex-col gap-[9px] min-w-[100px] w-[140px] max-sm:w-full">
-            <span className="text-xs font-normal leading-[14px] text-(--text-muted)">Speed</span>
+            <span className="text-xs font-normal leading-[14px] text-(--text-muted)">Velocidade</span>
             <div className="strength-track relative w-full h-9 rounded-lg bg-(--strength-bg) shadow-(--strength-shadow) overflow-hidden cursor-grab active:cursor-grabbing hover:bg-(--strength-hover)">
               <div className="absolute top-0 left-0 bottom-0 rounded-lg bg-(--strength-fill-bg) shadow-(--strength-shadow) transition-[width] duration-[80ms] ease-out pointer-events-none" style={{ width: `${fillPct}%` }} />
               <span className="absolute top-0 left-[11px] h-full flex items-center text-[11px] font-normal leading-[14px] text-(--text-muted) whitespace-nowrap pointer-events-none z-[1]">{(speed / 100).toFixed(2)}×</span>
@@ -95,7 +103,7 @@ export function Playground({
                 step={5}
                 value={speed}
                 onChange={(e) => onSpeedChange(Number(e.target.value))}
-                aria-label="Animation speed"
+                aria-label="Velocidade da animação"
               />
             </div>
           </div>

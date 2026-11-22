@@ -36,16 +36,16 @@ export function App() {
 
       <Examples speed={speed / 100} debug={debug} bigChips={bigChips} smallAll={smallAll} />
 
-      <section className="w-full mb-6" aria-label="Installation">
-        <h2 className="text-base font-normal leading-[34px] text-(--section-title-color) mb-1">Installation</h2>
+      <section className="w-full mb-6" aria-label="Instalação">
+        <h2 className="text-base font-normal leading-[34px] text-(--section-title-color) mb-1">Instalação</h2>
         <div className="flex items-center h-10 bg-(--code-bg) rounded-[10px] py-0.5 pr-10 pl-3 overflow-hidden relative">
           <code className="font-[Roboto_Mono,monospace] text-sm leading-[22px] text-(--code-text) whitespace-pre overflow-x-auto min-w-0 flex-1">npm install thinking-orbs</code>
           <CopyButton getText={() => 'npm install thinking-orbs'} />
         </div>
       </section>
 
-      <section className="w-full mb-6" aria-label="Usage">
-        <h2 className="text-base font-normal leading-[34px] text-(--section-title-muted) mb-1">Usage</h2>
+      <section className="w-full mb-6" aria-label="Uso">
+        <h2 className="text-base font-normal leading-[34px] text-(--section-title-muted) mb-1">Uso</h2>
         <div className="flex items-start h-auto bg-(--code-bg) rounded-[10px] py-1.5 pr-10 pl-3 overflow-hidden relative">
           <code className="font-[Roboto_Mono,monospace] text-sm leading-[22px] text-(--code-text) whitespace-pre overflow-x-auto min-w-0 flex-1">{USAGE_SNIPPET}</code>
           <CopyButton getText={() => USAGE_SNIPPET} />
